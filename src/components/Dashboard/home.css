@@ -1,0 +1,14 @@
+.home{
+    flex: 4;
+    margin: 80px;
+}
+
+.homeWidgets{
+    display: flex;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.linechart{
+    margin: 40px;
+}
