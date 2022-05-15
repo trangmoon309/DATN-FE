@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Dropdown } from "semantic-ui-react";
-import { clearActivationMessage, logCustomerOut, setActivationCodeSentFalse } from "../../redux/customerSlice/customerSlice";
+import { clearActivationMessage, logCustomerOut, setActivationCodeSentFalse } from "../../redux/userSlice/userSlice";
 import { useHistory } from "react-router";
 import { toast } from "react-toastify";
 import { getAll } from "../../redux/rentalSlice/rentalSlice";

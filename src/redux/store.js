@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import carSlice from "./carSlice/carSlice";
 import colorSlice from "./colorSlice/colorSlice";
-import customerSlice from "./customerSlice/customerSlice";
+import userSlice from "./userSlice/userSlice";
 import filterSlice from "./filterSlice/filterSlice";
 import rentalSlice from "./rentalSlice/rentalSlice";
 import searchBarSlice from "./searchBarSlice/searchBarSlice";
@@ -12,9 +12,7 @@ export default configureStore({
     color: colorSlice,
     filter: filterSlice,
     search: searchBarSlice,
-    customer: customerSlice,
+    user: userSlice,
     rental:rentalSlice,
-    
-
   },
 });

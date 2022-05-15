@@ -9,7 +9,7 @@ import { FooterContainer } from './../Footer/FooterContainer';
 export default function Dashboard() {
   return (
     <div>
-        <div style={{"z-index": "2em" }}>
+        <div style={{"zIndex": "2em" }}>
             <NavigationBar></NavigationBar>
         </div>
         <div className="home">
