@@ -6,10 +6,9 @@ const authService = new AuthService();
 export const logUserIn = createAsyncThunk(
   "user/logUserIn",
   async (credentials) => {
-    const response = authService.getToken(credentials.email, credentials.password);
-    return response.data.success;
-  }
-);
+    var res = await authService.getToken(credentials.email, credentials.password);
+    return res.data;
+});
 
 export const getCurrentUser = createAsyncThunk(
   "user/getCurrentUser",
@@ -34,8 +33,13 @@ export const userSlice = createSlice({
     setLoggedInTrue: (state) => {
       state.loggedIn = true;
     },
+    setLoggedInFalse: (state) => {
+      state.loggedIn = false;
+    },
     logCustomerOut: (state) => {
       state.currentUser = null;
+      localStorage.removeItem("_token");
+      localStorage.removeItem("user");
     },
     setAdminTrue: (state) => {
       state.admin = true
@@ -43,22 +47,15 @@ export const userSlice = createSlice({
   },
   extraReducers: {
     [logUserIn.fulfilled]: (state, action) => {
-      state.loggedIn = action.payload;
-      if (action.payload === true) {
-        state.message = "Logged in successfully";
-        
-      } else {
-        state.message = "Can't logged in, please check the infos and try again";
-      }
+      state.loggedIn = action.payload != null;
+      console.log(state.loggedIn);
     },
     [getCurrentUser.fulfilled]: (state, action) => {
-      console.log("hihi");
-      console.log(action);
       state.currentUser = action.payload;
     },
   },
-})   ;
+});
 
-export const {setCurrentUser, setLoggedInTrue, logCustomerOut, setAdminTrue} =
+export const {setCurrentUser, setLoggedInTrue, logCustomerOut, setAdminTrue, setLoggedInFalse} =
 userSlice.actions;
 export default userSlice.reducer;

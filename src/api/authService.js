@@ -1,6 +1,7 @@
 import axios from "axios";
 import {API_URL_IDENTITY_API, API_URL_TOKEN, UserEndpoint} from "./config"
 import _ from "lodash";
+import { toast } from "react-toastify";
 
 export default class AuthService{
 
@@ -35,9 +36,12 @@ export default class AuthService{
           const { access_token } = response.data;
           localStorage.setItem("_token", access_token);
         }
-        return Promise.resolve(response.data);
+        return Promise.resolve(response);
       })
-      .catch((err) => Promise.reject(err));
+      .catch((err) =>{
+        toast.error("Can't logged in, please check the infos and try again");
+        return Promise.reject(err);
+      });
   };
 
   getCurrentUser = async() => {

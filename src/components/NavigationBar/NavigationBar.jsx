@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import * as FaIcons from 'react-icons/fa';
 import * as AiIcons from 'react-icons/ai';
 import { Link } from 'react-router-dom';
@@ -6,11 +6,27 @@ import { SidebarData } from './SideBar';
 import './Navbar.css';
 import { IconContext } from 'react-icons';
 import Logo from './Logo';
+import {
+  setLoggedInFalse,
+  logCustomerOut
+} from "../../redux/userSlice/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 
 function NavigationBar() {
   const [sidebar, setSidebar] = useState(false);
-
+  const loggedIn = useSelector((state) => state.user.loggedIn);
   const showSidebar = () => setSidebar(!sidebar);
+  const dispatch = useDispatch();
+  const history = useHistory()
+
+  function handleLog() {
+    if(loggedIn){
+      dispatch(setLoggedInFalse());
+      dispatch(logCustomerOut());
+    }
+    history.push('/signin');  
+  }
 
   return (
     <>
@@ -29,9 +45,9 @@ function NavigationBar() {
             <Link to='cart' className='menu-bars-right-item'>
               <FaIcons.FaShoppingCart />
             </Link>
-            <Link to='/signin' className='menu-bars-right-item'>
+            <button onClick={handleLog} className='menu-bars-right-item'>
               <FaIcons.FaSignInAlt />
-            </Link>
+            </button>
           </div>
         </div>
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>

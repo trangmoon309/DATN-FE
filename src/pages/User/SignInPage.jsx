@@ -7,9 +7,8 @@ import {
   setLoggedInTrue,
   setAdminTrue
 } from "../../redux/userSlice/userSlice";
-import "../../signin.css"
-import { Link } from 'react-router-dom';
-import { Login } from "react-admin";
+import "../../signin.css";
+import { toast } from "react-toastify";
 
 function SignInPage() {
   const dispatch = useDispatch();
@@ -17,27 +16,20 @@ function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const loggedIn = useSelector((state) => state.user.loggedIn);
-  const cs = useSelector((state) => state.user.currentUser);
   const [dynamicContainer, setDynamicContainer] = useState("container");
 
   useEffect(() => {
-    if (loggedIn) {
+    if(loggedIn){
       dispatch(getCurrentUser());
-      console.log("Current user");
-      console.log(cs);
-
-      if(localStorage.getItem("user") == null){
-        dispatch(getCurrentUser());
-      }
-      //history.push("/")
+      toast.success("Successfully login! ") 
+      setTimeout(() => {
+        history.push('/')
+      }, 1000);
     }
-  });
+  },[loggedIn]);
 
   function submitHandler() {
-    dispatch(logUserIn({ email: email, password: password }));
-    if(localStorage.getItem("_token") != null){
-      dispatch(setLoggedInTrue());
-    }
+    dispatch(logUserIn({email:email, password:password}));
   }
 
   return (
@@ -61,7 +53,7 @@ function SignInPage() {
               <input style={{margin:10}} type="email" name="email" placeholder="Email" onChange={e => setEmail(e.target.value)}/>
               <input type="password" name="password" placeholder="Password" onChange={e => setPassword(e.target.value)}/>
               <a href="#">Forgot Your Password?</a>
-              <button style={{"marginTop": 10}} onClick={submitHandler} type='button'><Link to='/'>Let me in...</Link></button>
+              <button style={{"marginTop": 10}} onClick={submitHandler} type='button'>Let me in...</button>
               <h5>New to here! <a className="ghost" id="signUp" onClick={() => setDynamicContainer(dynamicContainer + " right-panel-active")}><u>Sign Up</u></a></h5>
           </form>
         </div>
