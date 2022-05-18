@@ -6,7 +6,6 @@ import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import EmployeeForm from './EmployeeForm';
 
 function ProfilePage() {
-    const currentCustomer = useSelector(state => state.customer.currentCustomer)
   return (
     <div>
       <div style={{"z-index": "2em" }}>

@@ -76,13 +76,6 @@ export default function EmployeeForm(props) {
                         error={errors.fullName}
                     />
                     <Controls.Input
-                        label="Email"
-                        name="email"
-                        value={values.email}
-                        onChange={handleInputChange}
-                        error={errors.email}
-                    />
-                    <Controls.Input
                         label="Mobile"
                         name="mobile"
                         value={values.mobile}
@@ -90,8 +83,8 @@ export default function EmployeeForm(props) {
                         error={errors.mobile}
                     />
                     <Controls.Input
-                        label="City"
-                        name="city"
+                        label="Address"
+                        name="address"
                         value={values.city}
                         onChange={handleInputChange}
                     />
@@ -103,14 +96,6 @@ export default function EmployeeForm(props) {
                         value={values.gender}
                         onChange={handleInputChange}
                         items={genderItems}
-                    />
-                    <Controls.Select
-                        name="departmentId"
-                        label="Department"
-                        value={values.departmentId}
-                        onChange={handleInputChange}
-                        options={employeeService.getDepartmentCollection()}
-                        error={errors.departmentId}
                     />
                     <Controls.Input
                         label="ID Number"

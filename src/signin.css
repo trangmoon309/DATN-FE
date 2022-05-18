@@ -82,11 +82,11 @@ input {
     box-shadow: 0 14px 28px rgba(0,0,0,0.25), 0 10px 10px rgba(0,0,0,0.22);
     position: relative;
     overflow: hidden;
-    width: 800px;
+    width: 900px;
     max-width: 110%;
-    min-height: 580px;
+    min-height: 630px;
     margin-top: 70px;
-    margin-left: 370px;
+    margin-left: 330px;
 }
 
 .form-container {

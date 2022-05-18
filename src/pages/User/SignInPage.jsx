@@ -37,10 +37,11 @@ function SignInPage() {
         <div className="form-container sign-up-container">
           <form onSubmit={submitHandler}>
                 <h1>Create Account</h1>
+                <input type="number" name="username" placeholder="User Name" style={{margin:10}}/>
+                <input type="text" name="email" placeholder="Email" style={{margin:10}} />
+                <input type="password" name="password" placeholder="Password" style={{margin:10}} />
                 <input type="text" name="fname" placeholder="First Name" style={{margin:10}} />
                 <input type="text" name="lname" placeholder="Last Name" style={{margin:10}} />
-                <input type="text" name="address" placeholder="Address" style={{margin:10}} />
-                <input type="password" name="password" placeholder="Password" style={{margin:10}} />
                 <input type="text" name="phone" placeholder="Phone Number"  style={{margin:10}}/>
                 <input type="number" name="age" placeholder="Age" style={{margin:10}}/>
                 <button style={{margin:10}}>Create Account</button>
@@ -60,10 +61,10 @@ function SignInPage() {
         <div className="overlay-container">
           <div className="overlay">
               <div className="overlay-panel overlay-left">
-                <img src="https://www.freevector.com/uploads/vector/preview/27644/rental2.jpg" alt="movie-1" height="580" width="580"/>
+                <img src="https://www.freevector.com/uploads/vector/preview/27644/rental2.jpg" alt="movie-1" height="630" width="600"/>
               </div>
               <div className="overlay-panel overlay-right">
-                <img src="https://as2.ftcdn.net/v2/jpg/01/55/06/59/1000_F_155065975_0koDTNC4SUudifhCKE2zMnzTliLgjCXZ.jpg" alt="movie-2" height="580" width="500" />
+                <img src="https://as2.ftcdn.net/v2/jpg/01/55/06/59/1000_F_155065975_0koDTNC4SUudifhCKE2zMnzTliLgjCXZ.jpg" alt="movie-2" height="630" width="600" />
               </div>
           </div>
         </div>
