@@ -18,6 +18,33 @@ export const getCurrentUser = createAsyncThunk(
   }
 );
 
+export const registerUser = createAsyncThunk(
+  "user/registerUser",
+  async (credentials) => {
+    console.log("credentials");
+    console.log(credentials);
+    const response = await authService.register(credentials.username, 
+      credentials.email, 
+      credentials.password, 
+      credentials.firstName, 
+      credentials.lastName, 
+      credentials.phoneNumber, 
+      credentials.extraInfors);
+    return response.data;
+  }
+);
+
+export const udpateProfile = createAsyncThunk(
+  "user/udpateProfile",
+  async (credentials) => {
+    const response = await authService.update(credentials.name, 
+      credentials.surname, 
+      credentials.phoneNumber, 
+      credentials.extraInfors);
+    return response.data;
+  }
+);
+
 export const userSlice = createSlice({
   name: "user",
   initialState: {
@@ -29,6 +56,7 @@ export const userSlice = createSlice({
   reducers: {
     setCurrentUser: (state, action) => {
       state.currentUser = action.payload;
+      
     },
     setLoggedInTrue: (state) => {
       state.loggedIn = true;
@@ -48,10 +76,13 @@ export const userSlice = createSlice({
   extraReducers: {
     [logUserIn.fulfilled]: (state, action) => {
       state.loggedIn = action.payload != null;
-      console.log(state.loggedIn);
     },
     [getCurrentUser.fulfilled]: (state, action) => {
       state.currentUser = action.payload;
+    },
+    [udpateProfile.fulfilled]: (state, action) => {
+      state.currentUser = action.payload;
+      localStorage.setItem("user", JSON.stringify(action.payload));
     },
   },
 });

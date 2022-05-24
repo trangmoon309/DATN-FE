@@ -1,4 +1,4 @@
-export const API_URL = "http://20.85.234.109:1111/api";
+export const API_URL = "http://localhost:3333/api";
 export const API_URL_IDENTITY_API = "http://localhost:2222/api";
 export const API_URL_TOKEN = "http://localhost:2222/connect/token";
 
@@ -17,7 +17,11 @@ export const HttpMethod = {
 };
 
 // USER
-const Profile = '/account/my-profile';
+const Profile = '/users/current';
+const ProfileAvatar = '/users/avatar/current';
+const Register = '/users';
 export const UserEndpoint = {
     Profile,
+    Register,
+    ProfileAvatar
 }

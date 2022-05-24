@@ -1,5 +1,5 @@
 import axios from "axios";
-import {API_URL_IDENTITY_API, API_URL_TOKEN, UserEndpoint} from "./config"
+import {API_URL_IDENTITY_API, API_URL_TOKEN, API_URL, UserEndpoint} from "./config"
 import _ from "lodash";
 import { toast } from "react-toastify";
 
@@ -49,7 +49,7 @@ export default class AuthService{
       .request({
         url: `${UserEndpoint.Profile}`,
         method: "get",
-        baseURL: `${API_URL_IDENTITY_API}`,
+        baseURL: `${API_URL}`,
         headers: {
           Authorization: `Bearer ${this.getCurrentToken()}`,
         },
@@ -64,12 +64,98 @@ export default class AuthService{
       .catch((err) => Promise.reject(err));
   }
 
-  register = (username, email, password) => {
-    return axios.post(API_URL_IDENTITY_API + "signup", {
-      username,
-      email,
-      password,
-    });
+  register = async (username, email, password, firstName, lastName, phoneNumber, extraInfors) => {
+    var reqData = {
+      "username": username,
+      "password": password,
+      "email": email,
+      "firstName": firstName,
+      "lastName": lastName,
+      "phoneNumber": phoneNumber,
+      "extraInfors": {
+        "age": extraInfors.age,
+        "address": extraInfors.address,
+        "avatarId": extraInfors.avatarId,
+        "idNumber": extraInfors.idNumber,
+        "driverLicense": extraInfors.driverLicense,
+        "gender": extraInfors.gender,
+      }
+    };
+    return await axios
+      .request({
+        baseURL: `${API_URL}`,
+        url: `${UserEndpoint.Register}`,
+        method: "post",
+        withCredentials: true,
+        data: reqData
+      })
+      .then((response) => {
+        toast.success("Successfully register! ") 
+        return Promise.resolve(response);
+      })
+      .catch((err) =>{
+        toast.error(err.response.data.validationErrors[0].message);
+        return Promise.reject(err);
+      });
+  };
+
+  update = async (firstName, lastName, phoneNumber, extraInfors) => {
+    var reqData = {
+      "firstName": firstName,
+      "lastName": lastName,
+      "phoneNumber": phoneNumber,
+      "extraInfors": {
+        "age": extraInfors.age,
+        "address": extraInfors.address,
+        "avatarId": extraInfors.avatarId,
+        "idNumber": extraInfors.idNumber,
+        "driverLicense": extraInfors.driverLicense,
+        "gender": extraInfors.gender,
+      }
+    };
+    return await axios
+      .request({
+        baseURL: `${API_URL}`,
+        url: `${UserEndpoint.Profile}`,
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${this.getCurrentToken()}`,
+        },
+        withCredentials: true,
+        data: reqData
+      })
+      .then((response) => {
+        toast.success("Successfully updated! ") 
+        return Promise.resolve(response);
+      })
+      .catch((err) =>{
+        return Promise.reject(err);
+      });
+  };
+
+  updateAvatar = async (imageFile) => {
+    var bodyFormData = new FormData();
+    bodyFormData.append('image', imageFile); 
+
+    return await axios
+      .request({
+        baseURL: `${API_URL}`,
+        url: `${UserEndpoint.ProfileAvatar}`,
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${this.getCurrentToken()}`,
+          "Content-Type": "multipart/form-data"
+        },
+        withCredentials: true,
+        data: bodyFormData
+      })
+      .then((response) => {
+        toast.success("Successfully updated! ") 
+        return Promise.resolve(response);
+      })
+      .catch((err) =>{
+        return Promise.reject(err);
+      });
   };
 
   logout = () => {

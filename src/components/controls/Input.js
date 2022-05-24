@@ -10,6 +10,7 @@ export default function Input(props) {
             label={label}
             name={name}
             value={value}
+            //defaultValue={value}
             onChange={onChange}
             {...other}
             {...(error && {error:true,helperText:error})}

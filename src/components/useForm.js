@@ -8,16 +8,61 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
     const [errors, setErrors] = useState({});
 
     const handleInputChange = e => {
-        const { name, value } = e.target
+        const { name, value } = e.target;
+        const data = {...values};
         setValues({
-            ...values,
-            [name]: value
-        })
+            data,
+            [name]: value,
+          });
         if (validateOnChange)
             validate({ [name]: value })
     }
 
+    // Profile
+    const handleInputProfileChange = e => {
+        const { name, value } = e.target;
+        const extraProps = ['age','address','avatarId','idNumber','driverLicense','gender'];
+
+        if(extraProps.includes(name)){
+            setValues({
+                ...values,
+                extraInfors: {
+                  ...values.extraInfors,
+                  [name]: value,
+                },
+              });
+        }else {
+            setValues({
+                ...values,
+                [name]: value,
+              });
+        }
+        if (validateOnChange)
+            validate({ [name]: value })
+    }
+
+    const resetFormProfile = () => {
+        initialFValues.name = '';
+        initialFValues.surname = '';
+        initialFValues.phoneNumber = '';
+        initialFValues.extraInfors.address = '';
+        initialFValues.extraInfors.avatarId = '';
+        initialFValues.extraInfors.idNumber = '';
+        initialFValues.extraInfors.driverLicense = '';
+        initialFValues.extraInfors.gender = '';
+        setValues(initialFValues);
+        setErrors({})
+    }
+
     const resetForm = () => {
+        initialFValues.name = '';
+        initialFValues.surname = '';
+        initialFValues.phoneNumber = '';
+        initialFValues.extraInfors.address = '';
+        initialFValues.extraInfors.avatarId = '';
+        initialFValues.extraInfors.idNumber = '';
+        initialFValues.extraInfors.driverLicense = '';
+        initialFValues.extraInfors.gender = '';
         setValues(initialFValues);
         setErrors({})
     }
@@ -29,8 +74,9 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
         errors,
         setErrors,
         handleInputChange,
-        resetForm
-
+        handleInputProfileChange,
+        resetForm,
+        resetFormProfile
     }
 }
 

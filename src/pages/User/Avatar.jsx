@@ -21,7 +21,7 @@ class AvatarForm extends React.Component {
 
   onCrop(preview) {
     this.setState({ preview });
-    console.log(preview);
+    //console.log(preview);
   }
 
   onBeforeFileLoad(elem) {
@@ -32,7 +32,7 @@ class AvatarForm extends React.Component {
   }
 
   render() {
-    console.log(this.state.src);
+    //console.log(this.state.src);
     return (
         <Grid container style={{"margin":"40px", "padding-left":"180px"}}>
             <Avatar
