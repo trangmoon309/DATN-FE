@@ -1,5 +1,5 @@
 import axios from "axios";
-import {API_URL_IDENTITY_API, API_URL_TOKEN, API_URL, UserEndpoint} from "./config"
+import {API_URL_IDENTITY_API, API_URL_TOKEN, API_URL, UserEndpoint, ProfileImageEndpoint} from "./config"
 import _ from "lodash";
 import { toast } from "react-toastify";
 
@@ -135,7 +135,7 @@ export default class AuthService{
 
   updateAvatar = async (imageFile) => {
     var bodyFormData = new FormData();
-    bodyFormData.append('image', imageFile); 
+    bodyFormData.append('file', imageFile); 
 
     return await axios
       .request({
@@ -150,13 +150,29 @@ export default class AuthService{
         data: bodyFormData
       })
       .then((response) => {
-        toast.success("Successfully updated! ") 
+        toast.success("Successfully avatar updated! ") 
         return Promise.resolve(response);
       })
       .catch((err) =>{
         return Promise.reject(err);
       });
   };
+
+  getAvatar = async() => {
+    const name = '3a0408fe-0fa6-a2c0-8dc4-8f89b13ecff0';
+    return await axios
+      .request({
+        url: `${ProfileImageEndpoint.GetProfileImage}/${name}`,
+        method: "get",
+        baseURL: `${API_URL}`,
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response);
+        return Promise.resolve(response);
+      })
+      .catch((err) => Promise.reject(err));
+  }
 
   logout = () => {
     localStorage.removeItem("user");

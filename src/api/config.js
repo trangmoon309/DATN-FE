@@ -23,5 +23,10 @@ const Register = '/users';
 export const UserEndpoint = {
     Profile,
     Register,
-    ProfileAvatar
+    ProfileAvatar,
+}
+
+const GetProfileImage = 'profile-images/byName';
+export const ProfileImageEndpoint = {
+    GetProfileImage
 }

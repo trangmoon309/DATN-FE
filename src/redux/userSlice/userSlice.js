@@ -18,6 +18,14 @@ export const getCurrentUser = createAsyncThunk(
   }
 );
 
+export const getCurrentProfileImage = createAsyncThunk(
+  "user/getCurrentProfileImage",
+  async () => {
+    const response = await authService.getAvatar();
+    return response.data;
+  }
+);
+
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (credentials) => {
@@ -34,13 +42,21 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-export const udpateProfile = createAsyncThunk(
-  "user/udpateProfile",
+export const updateProfile = createAsyncThunk(
+  "user/updateProfile",
   async (credentials) => {
     const response = await authService.update(credentials.name, 
       credentials.surname, 
       credentials.phoneNumber, 
       credentials.extraInfors);
+    return response.data;
+  }
+);
+
+export const updateAvatar = createAsyncThunk(
+  "user/updateAvatar",
+  async (file) => {
+    const response = await authService.updateAvatar(file);
     return response.data;
   }
 );
@@ -80,7 +96,11 @@ export const userSlice = createSlice({
     [getCurrentUser.fulfilled]: (state, action) => {
       state.currentUser = action.payload;
     },
-    [udpateProfile.fulfilled]: (state, action) => {
+    [updateProfile.fulfilled]: (state, action) => {
+      state.currentUser = action.payload;
+      localStorage.setItem("user", JSON.stringify(action.payload));
+    },
+    [updateAvatar.fulfilled]: (state, action) => {
       state.currentUser = action.payload;
       localStorage.setItem("user", JSON.stringify(action.payload));
     },

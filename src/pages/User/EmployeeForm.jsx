@@ -1,26 +1,25 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { Grid, } from '@material-ui/core';
 import Controls from './../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import AvatarForm from './Avatar';
-import { useDispatch, useSelector } from "react-redux";
+import AvatarForm from './AvatarForm';
+import { useDispatch } from "react-redux";
 import {
-    udpateProfile
+    updateProfile,
+    updateAvatar
 } from "../../redux/userSlice/userSlice";
 
 export default function EmployeeForm() {
     //const currentUser = useSelector((state) => state.user.currentUser);
-    const currentUser = JSON.parse(localStorage.getItem("user"));
     const dispatch = useDispatch();
+    const currentUser = JSON.parse(localStorage.getItem("user"));
+    var innitializeValue = currentUser;
     const genderItems = [{ id: 'Male', title: 'Male', value: 'Male' },
         { id: 'Female', title: 'Female', value: 'Female' },
         { id: 'Other', title: 'Other', value: 'Other' },
     ]
-
-    console.log(currentUser);
-    var innitializeValue = currentUser;
     
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
@@ -44,15 +43,44 @@ export default function EmployeeForm() {
     } = useForm(innitializeValue, true, validate);
 
     const handleSubmit = e => {
-        dispatch(udpateProfile(values));
-        // .then(() =>
-            
-        // );
+        dispatch(updateProfile(values)).then((result) => {
+            if(file !== ''){
+                //console.log("da update");
+                dispatch(updateAvatar(file));
+            }
+        }).catch((error) => {
+        });		
     }
+
+    // File Uploading
+    const defaultImg = 'default.PNG';
+    const virtualDirectory = 'http://localhost:3333/datn/profile-images/';
+    const userAvatarId = innitializeValue.extraInfors.avatarId;
+
+    const defaultAvatarUrl = ((userAvatarId !== '') || (userAvatarId !== ' ')) ? (virtualDirectory + userAvatarId  + '.jpg') : (virtualDirectory + defaultImg);
+    console.log(defaultAvatarUrl);
+    const [file, setFile] = useState('');
+    const [imagePreviewUrl, setImagePreviewUrl] = useState(defaultAvatarUrl);
+
+    function onFileChangeCapture(e) {
+        e.preventDefault();
+        let reader = new FileReader();
+        let filex = e.target.files[0];
+        //console.log('handle uploading----', filex);
+        reader.onloadend = () => {
+          setFile(filex);
+          setImagePreviewUrl(reader.result);
+        }
+        reader.readAsDataURL(filex);
+    };
 
     return (
         <Form onSubmit={handleSubmit}>
-            <AvatarForm></AvatarForm>
+            <AvatarForm
+                imagePreviewUrl={imagePreviewUrl}
+                file={file}
+                onChange={onFileChangeCapture}
+            ></AvatarForm>
             <Grid container>
                 <Grid item xs={6}>
                     <Controls.Input
