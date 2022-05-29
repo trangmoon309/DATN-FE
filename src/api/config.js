@@ -26,7 +26,27 @@ export const UserEndpoint = {
     ProfileAvatar,
 }
 
+// Profile
 const GetProfileImage = 'profile-images/byName';
 export const ProfileImageEndpoint = {
     GetProfileImage
 }
+
+// VehicleLine
+const VehicleLine = 'vehicle-lines';
+export const VehicleLineEndpoint = {
+    VehicleLine
+}
+
+// VehicleType
+const VehicleType = 'vehicle-types';
+export const VehicleTypeEndpoint = {
+    VehicleType
+}
+
+// Vehicle
+const Vehicle = 'vehicles';
+export const VehicleEndpoint = {
+    Vehicle
+}
+

@@ -1,29 +1,35 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import Pagination from '../Pagination/Pagination';
-import data from './mock-data.json';
 import NavigationBar from './../../components/NavigationBar/NavigationBar';
 import FilterBar from './../../components/Filter/FilterBar';
 import "../../table.css"
-import { Link } from 'react-router-dom';
 import * as FaIcons from 'react-icons/fa';
 import Popup from './../../components/Popup';
 import AddVehicleTypeForm from './AddVehicleTypeForm';
 import AddIcon from '@material-ui/icons/Add';
 import Controls from './../../components/controls/Controls';
 import { makeStyles} from '@material-ui/core';
+import {
+  deleteVehicleType,
+  getList,
+  setDeletedItem
+} from "../../redux/vehicleSlice/vehicleTypeSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
 
 let PageSize = 10;
 
 const VehicleTypeList = props => {
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const vehicleTypes = useSelector(state => state.vehicleType.items);
+  const totalVehicleTypes = useSelector(state => state.vehicleType.totalVehicleTypes);
+
+  const [keyWord, setKeyWord] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [openPopup, setOpenPopup] = useState(false);
-  const [recordForEdit, setRecordForEdit] = useState(null);
-
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return data.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
+  const [editedItem, setEditedItem] = useState(null);
+  const [isEdited, setIsEdited] = useState(false);
 
   const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -42,18 +48,30 @@ const VehicleTypeList = props => {
   const classes = useStyles();
 
   const options = [
-    [{ value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }],
-
-    [{ value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }],
-
-    [{ value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }]
+    // [{ value: 'chocolate', label: 'Chocolate' },
+    // { value: 'strawberry', label: 'Strawberry' },
+    // { value: 'vanilla', label: 'Vanilla' }],
   ]
+
+  useEffect(() => {
+    dispatch(getList({keyWord:keyWord, skipCount:0}))
+  },[])
+
+  useEffect(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return vehicleTypes.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage]);
+
+  const handleDelete = id => {
+    dispatch(setDeletedItem(id));
+    dispatch(deleteVehicleType(id));
+  }
+
+  const onPageChange = page => {
+    setCurrentPage(page);
+    dispatch(getList({keyWord:keyWord, skipCount:(page-1)*10}))
+  }
 
   return (
     <div>
@@ -62,7 +80,9 @@ const VehicleTypeList = props => {
     </div>
     <div className="app" >
       <FilterBar
-        datas={options}
+          datas={options}
+          keyWord={keyWord}
+          setKeyWord={setKeyWord}
       ></FilterBar>
       <div className="wrapper" style={{"height": "50px", "position": "relative" }}>
         <Controls.Button
@@ -70,7 +90,7 @@ const VehicleTypeList = props => {
           variant="outlined"
           className={classes.newButton}
           startIcon={<AddIcon />}
-          onClick={() => { setOpenPopup(true); setRecordForEdit(null); }}/>
+          onClick={() => { setOpenPopup(true); setEditedItem(null); setIsEdited(false)}}/>
       </div>
       <Popup
         title="Vehicle Type Form"
@@ -78,8 +98,9 @@ const VehicleTypeList = props => {
         setOpenPopup={setOpenPopup}
       >
       <AddVehicleTypeForm
-        recordForEdit={recordForEdit}
-        addOrEdit={null} 
+        recordForEdit={isEdited}
+        content={editedItem} 
+        setOpenPopup={setOpenPopup}
       />
       </Popup>
       <table className="dataTable">
@@ -95,22 +116,22 @@ const VehicleTypeList = props => {
           </tr>
         </thead>
         <tbody>
-          {currentTableData.map(item => {
+          {vehicleTypes.map(item => {
             return (
               <tr>
                 <td>{item.id}</td>
-                <td>{item.first_name}</td>
-                <td>{item.last_name}</td>
-                <td>{item.email}</td>
-                <td>{item.phone}</td>
+                <td>{item.code}</td>
+                <td>{item.name}</td>
+                <td>{item.vehicleTypeDetails[0].name}</td>
+                <td>{item.creationTime}</td>
                 <td style={{"text-align":"center", "position":"relative"}}>
-                  <button onClick={() => { setOpenPopup(true); setRecordForEdit(null); }}
+                <button onClick={() => { setOpenPopup(true); setEditedItem(item); setIsEdited(true)}}
                           style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
                   <FaIcons.FaEdit />
                   </button>
                 </td>
                 <td style={{"text-align":"center"}}>
-                  <button onClick={() => { setOpenPopup(true); setRecordForEdit(null); }}
+                <button onClick={() => {handleDelete(item.id)}}
                           style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
                   <FaIcons.FaTrash />
                   </button>
@@ -124,9 +145,9 @@ const VehicleTypeList = props => {
         <Pagination
           className="pagination-bar"
           currentPage={currentPage}
-          totalCount={data.length}
+          totalCount={totalVehicleTypes}
           pageSize={PageSize}
-          onPageChange={page => setCurrentPage(page)}
+          onPageChange={page => onPageChange(page)}
         />
       </div>
     </div>

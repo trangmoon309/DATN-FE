@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState,useEffect } from 'react';
 import Pagination from '../Pagination/Pagination';
-import data from './mock-data.json';
 import NavigationBar from './../../components/NavigationBar/NavigationBar';
 import FilterBar from './../../components/Filter/FilterBar';
 import "../../table.css"
@@ -10,20 +9,17 @@ import AddVehicleLineForm from './AddVehicleLineForm';
 import AddIcon from '@material-ui/icons/Add';
 import Controls from './../../components/controls/Controls';
 import { makeStyles} from '@material-ui/core';
+import {
+  deleteVehicleLine,
+  getList,
+  setDeletedItem
+} from "../../redux/vehicleSlice/vehicleLineSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
+
 
 let PageSize = 10;
-
 const VehicleLineList = props => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [openPopup, setOpenPopup] = useState(false);
-  const [recordForEdit, setRecordForEdit] = useState(null);
-
-  const currentTableData = useMemo(() => {
-    const firstPageIndex = (currentPage - 1) * PageSize;
-    const lastPageIndex = firstPageIndex + PageSize;
-    return data.slice(firstPageIndex, lastPageIndex);
-  }, [currentPage]);
-
   const useStyles = makeStyles(theme => ({
     pageContent: {
         margin: theme.spacing(5),
@@ -37,99 +33,121 @@ const VehicleLineList = props => {
         right: '10px'
     }
   }))
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const vehicleLines = useSelector(state => state.vehicleLine.items);
+  const totalVehicleLines = useSelector(state => state.vehicleLine.totalVehicleLine);
 
+  const [keyWord, setKeyWord] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [openPopup, setOpenPopup] = useState(false);
+  const [editedItem, setEditedItem] = useState(null);
+  const [isEdited, setIsEdited] = useState(false);
   const classes = useStyles();
+  const options = []
 
-  const options = [
-    [{ value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }],
+  useEffect(() => {
+    dispatch(getList({keyWord:keyWord, skipCount:0}))
+  },[])
 
-    [{ value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }],
+  useEffect(() => {
+    const firstPageIndex = (currentPage - 1) * PageSize;
+    const lastPageIndex = firstPageIndex + PageSize;
+    return vehicleLines.slice(firstPageIndex, lastPageIndex);
+  }, [currentPage]);
 
-    [{ value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }]
-  ]
+  useEffect(() => {
+    dispatch(getList({keyWord:keyWord, skipCount:0}))
+  },[keyWord])
+
+  
+  const handleDelete = id => {
+    dispatch(setDeletedItem(id));
+    dispatch(deleteVehicleLine(id));
+  }
+
+  const onPageChange = page => {
+    setCurrentPage(page);
+    dispatch(getList({keyWord:keyWord, skipCount:(page-1)*10}))
+  }
 
   return (
     <div>
-    <div style={{"z-index": "2em" }}>
-      <NavigationBar></NavigationBar>
-    </div>
-    <div className="app" >
-      <FilterBar
-        datas={options}
-      ></FilterBar>
-      <div className="wrapper" style={{"height": "50px", "position": "relative" }}>
-        <Controls.Button
-          text="Add New"
-          variant="outlined"
-          className={classes.newButton}
-          startIcon={<AddIcon />}
-          onClick={() => { setOpenPopup(true); setRecordForEdit(null); }}/>
+      <div style={{"z-index": "2em" }}>
+        <NavigationBar></NavigationBar>
       </div>
-      <Popup
-        title="Vehicle Line Form"
-        openPopup={openPopup}
-        setOpenPopup={setOpenPopup}
-      >
-      <AddVehicleLineForm
-        recordForEdit={recordForEdit}
-        addOrEdit={null} 
-      />
-      </Popup>
-      <table className="dataTable">
-        <thead>
-          <tr>
-            <th>Index</th>
-            <th>Code</th>
-            <th>Name</th>
-            <th>Description</th>
-            <th>Creation Time</th>
-            <th></th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentTableData.map(item => {
-            return (
-              <tr>
-                <td>{item.id}</td>
-                <td>{item.first_name}</td>
-                <td>{item.last_name}</td>
-                <td>{item.email}</td>
-                <td>{item.phone}</td>
-                <td style={{"text-align":"center", "position":"relative"}}>
-                  <button onClick={() => { setOpenPopup(true); setRecordForEdit(null); }}
-                          style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
-                  <FaIcons.FaEdit />
-                  </button>
-                </td>
-                <td style={{"text-align":"center"}}>
-                  <button onClick={() => { setOpenPopup(true); setRecordForEdit(null); }}
-                          style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
-                  <FaIcons.FaTrash />
-                  </button>
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
-      <div style={{"margin-left":"70%"}}>
-        <Pagination
-          className="pagination-bar"
-          currentPage={currentPage}
-          totalCount={data.length}
-          pageSize={PageSize}
-          onPageChange={page => setCurrentPage(page)}
-        />
+      <div className="app" >
+        <FilterBar
+          datas={options}
+          keyWord={keyWord}
+          setKeyWord={setKeyWord}
+        ></FilterBar>
+        <div className="wrapper" style={{"height": "50px", "position": "relative" }}>
+          <Controls.Button
+            text="Add New"
+            variant="outlined"
+            className={classes.newButton}
+            startIcon={<AddIcon />}
+            onClick={() => { setOpenPopup(true); setEditedItem(null); setIsEdited(false)}}/>
+        </div>
+        <Popup
+          title="Vehicle Line Form"
+          openPopup={openPopup}
+          setOpenPopup={setOpenPopup}
+        >
+          <AddVehicleLineForm
+            recordForEdit={isEdited}
+            content={editedItem} 
+            setOpenPopup={setOpenPopup}
+          />
+        </Popup>
+        <table className="dataTable">
+          <thead>
+            <tr>
+              <th>Index</th>
+              <th>Code</th>
+              <th>Name</th>
+              <th>Creation Time</th>
+              <th></th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {vehicleLines.map(item => {
+              return (
+                <tr>
+                  <td>{item.id}</td>
+                  <td>{item.code}</td>
+                  <td>{item.name}</td>
+                  <td>{item.creationTime}</td>
+                  <td style={{"text-align":"center", "position":"relative"}}>
+                    <button onClick={() => { setOpenPopup(true); setEditedItem(item); setIsEdited(true)}}
+                            style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
+                    <FaIcons.FaEdit />
+                    </button>
+                  </td>
+                  <td style={{"text-align":"center"}}>
+                    <button onClick={() => {handleDelete(item.id)}}
+                            style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
+                    <FaIcons.FaTrash />
+                    </button>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+        <div style={{"margin-left":"70%"}}>
+          <Pagination
+            className="pagination-bar"
+            currentPage={currentPage}
+            totalCount={totalVehicleLines}
+            pageSize={PageSize}
+            onPageChange={page => {onPageChange(page)}}
+          />
+        </div>
       </div>
     </div>
-  </div>
   );
 };
 

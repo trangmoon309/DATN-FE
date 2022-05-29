@@ -1,46 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useState } from 'react'
 import { useDispatch, useSelector } from "react-redux";
 import Select from 'react-select'
-import { Button, InputGroup, FormControl } from 'react-bootstrap';
-import { getAllColors } from "../../redux/colorSlice/colorSlice";
-import { useHistory } from "react-router-dom";
-import { setFilterButtonPressed } from "../../redux/filterSlice/filterSlice";
-import { toast } from "react-toastify";
+import { InputGroup, FormControl } from 'react-bootstrap';
 
-function FilterBar({datas}) {
-  const colors = useSelector((state) => state.color.items);
-  const dispatch = useDispatch();
-  const history = useHistory()
-  const maxPrice = useSelector((state) => state.filter.maxPrice);
-  const minPrice = useSelector((state) => state.filter.minPrice);
-  const options = [
-    { value: 'chocolate', label: 'Chocolate' },
-    { value: 'strawberry', label: 'Strawberry' },
-    { value: 'vanilla', label: 'Vanilla' }
-  ]  
-
-  function clickFilterHandler() {
-    if(maxPrice>0 || minPrice>0|| colors.length>0){
-      dispatch(setFilterButtonPressed());
-      history.push("/filter")
-    }
-    else{
-      toast.dark('You selected no filter', {
-        position: "top-left",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-      });
-    }
-  }
-
-  useEffect(() => {
-    dispatch(getAllColors())
-  }, [dispatch])
-
+function FilterBar({datas, keyWord, setKeyWord}) {
   return (
     <div
       style={{
@@ -63,13 +26,11 @@ function FilterBar({datas}) {
             placeholder="Searching..."
             aria-label="Username"
             aria-describedby="basic-addon1"
+            value={keyWord}
+            onChange={(e) => setKeyWord(e.target.value)}
           />
         </InputGroup>
-      </div>
-
-      {/* <div style={{width: "25%", "margin-right": "20px"}}>
-        <Button variant="primary" onClick={clickFilterHandler} className="filterButton">Primary</Button>
-      </div> */}
+      </div> 
     </div>
   );
 }

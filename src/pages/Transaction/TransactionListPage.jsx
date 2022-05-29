@@ -1,6 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import Pagination from '../Pagination/Pagination';
-import data from '../VehicleLine/mock-data';
 import NavigationBar from './../../components/NavigationBar/NavigationBar';
 import FilterBar from './../../components/Filter/FilterBar';
 import "../../table.css"
@@ -13,7 +12,7 @@ const TransactionList = props => {
   const currentTableData = useMemo(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;
-    return data.slice(firstPageIndex, lastPageIndex);
+    return [].slice(firstPageIndex, lastPageIndex);
   }, [currentPage]);
 
   const options = [
@@ -69,7 +68,7 @@ const TransactionList = props => {
         <Pagination
           className="pagination-bar"
           currentPage={currentPage}
-          totalCount={data.length}
+          totalCount={[].length}
           pageSize={PageSize}
           onPageChange={page => setCurrentPage(page)}
         />

@@ -9,9 +9,8 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
 
     const handleInputChange = e => {
         const { name, value } = e.target;
-        const data = {...values};
         setValues({
-            data,
+            ...values,
             [name]: value,
           });
         if (validateOnChange)

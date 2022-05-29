@@ -8,7 +8,7 @@ function ProfilePage() {
   return (
     <div>
       <div style={{"z-index": "2em" }}>
-      <NavigationBar></NavigationBar>
+        <NavigationBar></NavigationBar>
       </div>
       <div className="app">
         <EmployeeForm></EmployeeForm>

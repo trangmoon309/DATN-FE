@@ -4,16 +4,16 @@ import Controls from './../../components/controls/Controls';
 import { useForm, Form } from '../../components/useForm';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-
-const initialFValues = {
-    id: 0,
-    name: '',
-    code: '',
-}
+import {
+    createVehicleLine,
+    updateVehicleLine,
+  } from "../../redux/vehicleSlice/vehicleLineSlice";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
 
 export default function AddVehicleLineForm(props) {
-    const { addOrEdit, recordForEdit } = props
-
+    const {recordForEdit,content,setOpenPopup } = props
+    const dispatch = useDispatch();
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
         if ('name' in fieldValues)
@@ -25,7 +25,12 @@ export default function AddVehicleLineForm(props) {
         if (fieldValues == values)
             return Object.values(temp).every(x => x == "")
     }
-
+    
+    const initialFValues = (recordForEdit === false) ? {
+        name: '',
+        code: '',
+    } : content;
+    
     const {
         values,
         setValues,
@@ -36,34 +41,42 @@ export default function AddVehicleLineForm(props) {
     } = useForm(initialFValues, true, validate);
 
     const handleSubmit = e => {
-        e.preventDefault()
-        if (validate()) {
-            addOrEdit(values, resetForm);
+        if (recordForEdit != null && recordForEdit === true)
+        {
+            console.log(values);
+            dispatch(updateVehicleLine(values)).then((result) => {
+            }).catch((error) => {
+            });	
         }
+        else{
+            if(!values['name'] || values['name'].length === 0){
+                toast.error("Name is required!");
+            }
+            else{
+                dispatch(createVehicleLine(values)).then((result) => {
+                }).catch((error) => {
+                });	
+            }
+        }
+        setOpenPopup(false);
     }
 
-    useEffect(() => {
-        if (recordForEdit != null)
-            setValues({
-                ...recordForEdit
-            })
-    }, [recordForEdit])
-
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form>
             <Grid container style={{"margin":"20px"}}>
                 <Controls.Input
                     name="name"
                     label="Name"
-                    value={values.fullName}
+                    value={values.name}
                     onChange={handleInputChange}
-                    error={errors.fullName}
+                    error={errors.name}
                 />
             </Grid>
 
             <div style={{"margin":"20px"}}>
                 <Controls.Button
-                    type="submit"
+                    type="button"
+                    onClick={handleSubmit} 
                     startIcon={<AddCircleIcon />}
                     text="Submit" />
                 <Controls.Button
