@@ -17,6 +17,39 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
             validate({ [name]: value })
     }
 
+    // Vehicle Type
+    const handleVehicleTypePropsChange = e => {
+        const { name, value } = e.target;
+        const list = [...values.vehicleTypeDetails];
+        const targetIndex = values.vehicleTypeDetails.findIndex(f=>f.id==name); 
+        let object = {...list[targetIndex]};
+        object.name=value;
+        list[targetIndex] = object;
+
+        setValues({
+            ...values,
+            vehicleTypeDetails: list    
+        });
+    }
+
+    const handleVehicleTypePropRemove = (index) => {
+        const list = [...values.vehicleTypeDetails];
+        list.splice(index, 1);
+        setValues({
+            ...values,
+            vehicleTypeDetails: list    
+        });
+    };
+    
+    const handleVehicleTypePropAdd = (index) => {
+        const list = [...values.vehicleTypeDetails];
+        list.push({id: index, name:""});
+        setValues({
+            ...values,
+            vehicleTypeDetails: list    
+        });
+    };
+
     // Profile
     const handleInputProfileChange = e => {
         const { name, value } = e.target;
@@ -74,8 +107,11 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
         setErrors,
         handleInputChange,
         handleInputProfileChange,
+        handleVehicleTypePropsChange,
+        handleVehicleTypePropRemove,
+        handleVehicleTypePropAdd,
         resetForm,
-        resetFormProfile
+        resetFormProfile,
     }
 }
 

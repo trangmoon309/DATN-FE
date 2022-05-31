@@ -5,28 +5,23 @@ import { useForm, Form } from '../../components/useForm';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import * as FaIcons from 'react-icons/fa';
-
-const initialFValues = {
-    id: 0,
-    name: '',
-    code: '',
-    properties: []
-}
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import {
+    createVehicleType,
+    updateVehicleType,
+  } from "../../redux/vehicleSlice/vehicleTypeSlice";
 
 export default function AddVehicleTypeForm(props) {
-    const { addOrEdit, recordForEdit } = props;
-    const [propList, setPropList] = useState([{ property: "" }]);
-    console.log(propList);
+    const {recordForEdit,content,setOpenPopup } = props;
+    const initialFValues = (recordForEdit === false) ? {
+        id: 0,
+        name: '',
+        code: '',
+        vehicleTypeDetails: []
+    } : content;
 
-    const handlePropRemove = (index) => {
-        const list = [...propList];
-        list.splice(index, 1);
-        setPropList(list);
-      };
-    
-    const handlePropAdd = () => {
-        setPropList([...propList, { service: "" }]);
-    };
+    const dispatch = useDispatch();
 
     const validate = (fieldValues = values) => {
         let temp = { ...errors }
@@ -46,51 +41,69 @@ export default function AddVehicleTypeForm(props) {
         errors,
         setErrors,
         handleInputChange,
+        handleVehicleTypePropsChange,
+        handleVehicleTypePropRemove,
+        handleVehicleTypePropAdd,
         resetForm
     } = useForm(initialFValues, true, validate);
 
     const handleSubmit = e => {
-        e.preventDefault()
-        if (validate()) {
-            addOrEdit(values, resetForm);
+        values.vehicleTypeDetails.forEach(x => {
+            if(Number.isInteger(x.id)){
+                x.id = null;
+            }
+        });
+        if (recordForEdit != null && recordForEdit === true)
+        {
+            dispatch(updateVehicleType(values)).then((result) => {
+            }).catch((error) => {
+            });	
         }
+        else{
+            if(!values['name'] || values['name'].length === 0){
+                toast.error("Name is required!");
+            }
+            else if(values.vehicleTypeDetails.some(x => (!x['name'] || x['name'].length === 0)))
+            {
+                toast.error("Name is required!");
+            }
+            else{
+                dispatch(createVehicleType(values)).then((result) => {
+                }).catch((error) => {
+                });	
+            }
+        }
+        setOpenPopup(false);
     }
 
-    useEffect(() => {
-        if (recordForEdit != null)
-            setValues({
-                ...recordForEdit
-            })
-    }, [recordForEdit])
-
     return (
-        <Form onSubmit={handleSubmit}>
+        <Form>
             <Grid container style={{"margin":"20px"}}>
                 <Controls.Input
                     name="name"
                     label="Name"
-                    value={values.fullName}
+                    value={values.name}
                     onChange={handleInputChange}
-                    error={errors.fullName}
+                    error={errors.name}
                 />
             </Grid>
             <p style={{"width": "100%", "text-align": "left"}}>Properties</p>
-            {propList &&
-                propList.map((singleProp, count) => (
+            {values.vehicleTypeDetails &&
+                values.vehicleTypeDetails.map((item, index) => (
                 <Grid container>
                     <Grid item xs={11} style={{"margin-left":"-18px"}}>
                         <Controls.Input
-                            name="property"
+                            name={item.id !== null ? item.id : index}
                             label="Property"
-                            value={values.fullName}
-                            onChange={handleInputChange}
-                            error={errors.fullName}
+                            value={item.name}
+                            onChange={handleVehicleTypePropsChange}
+                            error={errors.name}
                         />
                     </Grid>
                     <Grid item xs={1} style={{"padding-top":"15px"}}>
                     <button style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}
                         type="button"
-                        onClick={handlePropRemove}>
+                        onClick={() => handleVehicleTypePropRemove(index)}>
                         <FaIcons.FaMinus />
                     </button>
                     </Grid>
@@ -99,13 +112,14 @@ export default function AddVehicleTypeForm(props) {
             }
             <button style={{"align-self":"baseline", "width":"30px", "padding":"5px", "margin-left":"10px", "border-radius":"50px"}}
                     type="button"
-                    onClick={handlePropAdd}>
-                <FaIcons.FaPlus />
+                    onClick={() => handleVehicleTypePropAdd(values.vehicleTypeDetails.length)}>
+                    <FaIcons.FaPlus />
             </button>
 
             <div style={{"margin":"20px"}}>
                 <Controls.Button
-                    type="submit"
+                    type="button"
+                    onClick={handleSubmit} 
                     startIcon={<AddCircleIcon />}
                     text="Submit" />
                 <Controls.Button

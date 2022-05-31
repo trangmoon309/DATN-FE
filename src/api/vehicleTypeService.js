@@ -33,14 +33,18 @@ export default class VehicleTypeService{
       .catch((err) => Promise.reject(err));
   }
 
-  create = async (name) => {
+  create = async (object) => {
+    var reqData = {
+      "name": object.name,
+      "vehicleTypeDetails": object.vehicleTypeDetails
+    }
     return await axios
       .request({
-        url: `${VehicleTypeEndpoint.VehicleLine}`,
+        url: `${VehicleTypeEndpoint.VehicleType}`,
         method: "post",
         baseURL: `${API_URL}`,
         withCredentials: true,
-        data: name
+        data: reqData
       })
       .then((response) => {
         toast.success("Successfully created! ") 
@@ -56,10 +60,13 @@ export default class VehicleTypeService{
     var reqData = {
       "code": object.code,
       "name": object.name,
+      "vehicleTypeDetails": object.vehicleTypeDetails
     }
+    console.log(reqData);
+
     return await axios
       .request({
-        url: `${VehicleTypeEndpoint.VehicleLine}/${object.id}`,
+        url: `${VehicleTypeEndpoint.VehicleType}/${object.id}`,
         method: "put",
         baseURL: `${API_URL}`,
         withCredentials: true,
@@ -78,7 +85,7 @@ export default class VehicleTypeService{
   delete = async (id) => {
     return await axios
       .request({
-        url: `${VehicleTypeEndpoint.VehicleLine}/${id}`,
+        url: `${VehicleTypeEndpoint.VehicleType}/${id}`,
         method: "delete",
         baseURL: `${API_URL}`,
         withCredentials: true,

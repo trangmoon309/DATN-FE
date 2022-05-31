@@ -13,8 +13,8 @@ export const getList = createAsyncThunk(
 
 export const createVehicleType = createAsyncThunk(
   "vehicleType/create",
-  async (name) => {
-    const response = await service.create(name);
+  async (credentials) => {
+    const response = await service.create(credentials);
     return response.data;
   }
 );

@@ -73,6 +73,10 @@ const VehicleTypeList = props => {
     dispatch(getList({keyWord:keyWord, skipCount:(page-1)*10}))
   }
 
+  useEffect(() => {
+    dispatch(getList({keyWord:keyWord, skipCount:0}))
+  },[keyWord])
+
   return (
     <div>
     <div style={{"z-index": "2em" }}>
@@ -122,7 +126,7 @@ const VehicleTypeList = props => {
                 <td>{item.id}</td>
                 <td>{item.code}</td>
                 <td>{item.name}</td>
-                <td>{item.vehicleTypeDetails[0].name}</td>
+                <td>{item.name}</td>
                 <td>{item.creationTime}</td>
                 <td style={{"text-align":"center", "position":"relative"}}>
                 <button onClick={() => { setOpenPopup(true); setEditedItem(item); setIsEdited(true)}}
