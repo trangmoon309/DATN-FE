@@ -1,28 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
-import { setCurrentCar } from "../../redux/carSlice/carSlice";
+import {setCurrentVehicle} from "../../redux/vehicleSlice/vehicleSlice"
+import * as FaIcons from 'react-icons/fa';
 
-function CarItem({ car, carImages }) {
+function VehicleItem({ vehicle, vehicleImages }) {
+  const directoryPath = "http://localhost:3333/vehicle-images/";
   const dispatch = useDispatch();
   const history = useHistory();
-  const [shownCarImage, setShownCarImage] = useState({});
-
-  useEffect(() => {
-    carImages.forEach(carImage => {
-      if(carImage.car.id==car.id){
-        setShownCarImage(carImage)
-      }
-    });
-  }, [carImages])
 
   function selectCarHandler() {
-    dispatch(setCurrentCar(car));
-    history.push(`/details/${car.id}`);
+    dispatch(setCurrentVehicle(vehicle));
+    history.push(`/details/${vehicle.id}`);
   }
 
   return (
-    <div style={{ position: "relative", "width": "33%", "margin-bottom": "40px" }}>
+    <div style={{ position: "relative", "width": "33%", "margin-bottom": "55px" }}>
       <img
         className="carImage"
         style={{
@@ -32,11 +25,10 @@ function CarItem({ car, carImages }) {
           marginTop: "15px",
           marginBottom: "15px",
         }}
-        src={shownCarImage.imagePath?shownCarImage.imagePath:"https://nepalcarsrental.com/assets/images/NoCar.jpg"}
+        src={vehicleImages[0]?directoryPath + vehicleImages[0].fileInformationId + ".jpg":"https://nepalcarsrental.com/assets/images/NoCar.jpg"}
         onClick={selectCarHandler}
       ></img>
 
-      
       <div
         style={{
           background: "white",
@@ -47,10 +39,10 @@ function CarItem({ car, carImages }) {
           boxShadow: "0px 0px 18px 1px rgba(0,0,0,0.98)",
         }}
       >
-        <h3 style={{ padding: "5px", fontSize: 18 }}>${car.dailyPrice}/day</h3>
+        <h3 style={{ padding: "5px", fontSize: 18 }}>${vehicle.rentalPrice}/day</h3>
       </div>
     </div>
   );
 }
 
-export default CarItem;
+export default VehicleItem;

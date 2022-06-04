@@ -9,7 +9,7 @@ export default class VehicleService{
     return localStorage.getItem("_token");
   };
 
-  getList = async(keyWord, skipCount) => {
+  getList = async(keyWord, skipCount, vehicleTypeId, vehicleLineId) => {
     var parameters = {
       "skipCount": skipCount,
       "maxResultCount": 10
@@ -18,10 +18,18 @@ export default class VehicleService{
     if(keyWord !== null) {
       parameters["keyWord"] = keyWord;
     }
+
+    if(vehicleTypeId !== null) {
+      parameters["vehicleTypeId"] = vehicleTypeId;
+    }
+
+    if(vehicleLineId !== null) {
+      parameters["vehicleLineId"] = vehicleLineId;
+    }
     
     return await axios
       .request({
-        url: `${VehicleEndpoint.Vehicle}`,
+        url: `${VehicleEndpoint.Vehicle}/${VehicleEndpoint.GetListByCondition}`,
         method: "get",
         baseURL: `${API_URL}`,
         withCredentials: true,
@@ -33,14 +41,26 @@ export default class VehicleService{
       .catch((err) => Promise.reject(err));
   }
 
-  create = async (name) => {
+  create = async (object) => {
+    var reqData = {
+      "vehicleTypeId": object.vehicleTypeId,
+      "vehicleLineId": object.vehicleLineId,
+      "code": object.code,
+      "name": object.name,
+      "color": object.color,
+      "kilometerTravel": object.kilometerTravel,
+      "licensePlate": object.licensePlate,
+      "rentalPrice": object.rentalPrice,
+      "depositPrice": object.depositPrice,
+      "vehicleProperties": object.vehicleProperties,
+    }
     return await axios
       .request({
         url: `${VehicleEndpoint.Vehicle}`,
         method: "post",
         baseURL: `${API_URL}`,
         withCredentials: true,
-        data: name
+        data: reqData
       })
       .then((response) => {
         toast.success("Successfully created! ") 
@@ -52,10 +72,46 @@ export default class VehicleService{
       });
   };
 
+  updateImages = async (vehicleId, imageFiles) => {
+    var bodyFormData = new FormData();
+    imageFiles.forEach(file=>{
+      bodyFormData.append("images", file);
+    });
+    console.log(bodyFormData);
+
+    return await axios
+      .request({
+        baseURL: `${API_URL}`,
+        url: `${VehicleEndpoint.Vehicle}/${vehicleId}/${VehicleEndpoint.UploadImages}`,
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${this.getCurrentToken()}`,
+          "Content-Type": "multipart/form-data"
+        },
+        withCredentials: true,
+        data: bodyFormData
+      })
+      .then((response) => {
+        toast.success("Successfully images updated! ") 
+        return Promise.resolve(response);
+      })
+      .catch((err) =>{
+        return Promise.reject(err);
+      });
+  };
+
   update = async (object) => {
     var reqData = {
+      "vehicleTypeId": object.vehicleTypeId,
+      "vehicleLineId": object.vehicleLineId,
       "code": object.code,
       "name": object.name,
+      "color": object.color,
+      "kilometerTravel": object.kilometerTravel,
+      "licensePlate": object.licensePlate,
+      "rentalPrice": object.rentalPrice,
+      "depositPrice": object.depositPrice,
+      "vehicleProperties": object.vehicleProperties,
     }
     return await axios
       .request({

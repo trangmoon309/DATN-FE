@@ -46,7 +46,11 @@ export const VehicleTypeEndpoint = {
 
 // Vehicle
 const Vehicle = 'vehicles';
+const UploadImages = 'upload-vehicle-images';
+const GetListByCondition = 'by-condition';
 export const VehicleEndpoint = {
-    Vehicle
+    Vehicle,
+    UploadImages,
+    GetListByCondition
 }
 

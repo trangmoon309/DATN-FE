@@ -136,6 +136,7 @@ export default class AuthService{
   updateAvatar = async (imageFile) => {
     var bodyFormData = new FormData();
     bodyFormData.append('file', imageFile); 
+    console.log(imageFile);
 
     return await axios
       .request({

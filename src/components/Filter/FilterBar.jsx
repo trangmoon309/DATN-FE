@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from "react-redux";
 import Select from 'react-select'
 import { InputGroup, FormControl } from 'react-bootstrap';
 
@@ -14,8 +13,7 @@ function FilterBar({datas, keyWord, setKeyWord}) {
       {
         datas.map(item => 
           <div style={{width: "30%", "margin-right": "20px"}}>
-          {/* Dòng xe */}
-            <Select options={item} styles={colourStyles}  />
+            <Select options={item} styles={colourStyles} onChange={(selectedOption) => item[0].setSelected(selectedOption.value)}  />
           </div>
         )
       }

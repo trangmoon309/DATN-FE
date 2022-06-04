@@ -3,7 +3,7 @@ import VehicleLineService from '../../api/vehicleLineService'
 
 const service = new VehicleLineService();
 
-export const getList = createAsyncThunk(
+export const getVehicleLineList = createAsyncThunk(
   "vehicleLine/getList",
   async (credentials) => {
     const response = await service.getList(credentials.keyWord, credentials.skipCount);
@@ -48,7 +48,7 @@ export const vehicleLineSlice = createSlice({
     }
   },
   extraReducers: {
-    [getList.fulfilled]: (state, action) => {
+    [getVehicleLineList.fulfilled]: (state, action) => {
       state.items = action.payload.items;
       state.totalVehicleLine = action.payload.totalCount;
     },

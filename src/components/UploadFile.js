@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { RMIUploader } from "react-multiple-image-uploader";
 
-const dataSources = [];
+function UploadFile(props) {
+  const { images, setImages} = props;
 
-function UploadFile() {
   const [visible, setVisible] = useState(false);
   const handleSetVisible = () => {
     setVisible(true);
@@ -12,7 +12,9 @@ function UploadFile() {
     setVisible(false);
   };
   const onUpload = (data) => {
-    console.log("Upload files", data);
+    let list = [];
+    data.forEach((item) => list.push(item.file));
+    setImages(list)
   };
   const onSelect = (data) => {
     console.log("Select files", data);
@@ -29,7 +31,7 @@ function UploadFile() {
       onSelect={onSelect}
       onUpload={onUpload}
       onRemove={onRemove}
-      dataSources={dataSources}
+      dataSources={images}
       />
     </div>
   );

@@ -5,62 +5,26 @@ import NavigationBar from '../../../components/NavigationBar/NavigationBar';
 import "../../../table.css";
 import "./vehicleDetail.css";
 import { Colors } from './Colors';
-import {
-  clearImagesByCarId,
-  deleteCar,
-  getImagesByCarId,
-} from "../../../redux/carSlice/carSlice";
 import axios from "axios";
-import { toast } from "react-toastify";
 import AliceCarousel from "react-alice-carousel";
-
-let index = 0;
+import { FooterContainer } from './../../../components/Footer/FooterContainer';
+import * as FaIcons from 'react-icons/fa';
+import Popup from '../../../components/Popup';
+import VehicleForm from '../../../components/VehicleField/VehicleForm';
+import {
+  deleteVehicle
+} from "../../../redux/vehicleSlice/vehicleSlice";
 
 const VehicleDetail = props => {
 
-  const currentCar = useSelector((state) => state.cars.currentCar);
-  const imagesByCarId = useSelector((state) => state.cars.imagesByCarId);
-  const [file, setFile] = useState(null);
+  const currentVehicle = useSelector((state) => state.vehicle.currentVehicle);
   const history = useHistory();
   const dispatch = useDispatch();
-  const currentCustomer = useSelector(
-    (state) => state.customer.currentCustomer
-  );
-
-  console.log(imagesByCarId);
-  
-  useEffect(() => {
-    dispatch(getImagesByCarId(currentCar.id));
-  }, [dispatch, currentCar]);
-
-  useEffect(() => () => dispatch(clearImagesByCarId()), []);
-
-  function handleImagePreview(e) {
-    setFile(e.target.files[0]);
-  }
-
-  async function addImageHandler() {
-    if (file) {
-      await fileUpload(file)
-        .then((response) => {
-          toast.success("image added successfully");
-          console.log(response);
-        })
-        .catch((er) => console.log(er));
-    } else {
-      alert("choose image");
-    }
-  }
-
-  function deleteCarHandler() {
-    dispatch(deleteCar(currentCar));
-    setTimeout(() => {
-      history.push("/");
-    }, 300);
-  }
+  const directoryPath = "http://localhost:3333/vehicle-images/";
+  const [openPopup, setOpenPopup] = useState(false)
 
   async function fileUpload(file) {
-    const url = `https://springrestapi-carrental.herokuapp.com/api/images/add?id=${currentCar.id}`;
+    const url = `https://springrestapi-carrental.herokuapp.com/api/images/add?id=${currentVehicle.id}`;
     const formData = new FormData();
     formData.append("imageFile", file);
     const config = {
@@ -72,38 +36,11 @@ const VehicleDetail = props => {
     return response;
   }
 
-    var products = [
-        {
-          "_id": "1",
-          "title": "Nike Shoes",
-          "src": [
-              "https://www.upsieutoc.com/images/2020/06/27/img1.jpg",
-              "https://www.upsieutoc.com/images/2020/06/27/img2.jpg",
-              "https://www.upsieutoc.com/images/2020/06/27/img3.jpg",
-              "https://www.upsieutoc.com/images/2020/06/27/img4.jpg"
-            ],
-          "description": "UI/UX designing, html css tutorials",
-          "content": "Welcome to our channel Dev AT. Here you can learn web designing, UI/UX designing, html css tutorials, css animations and css effects, javascript and jquery tutorials and related so on.",
-          "price": 23,
-          "colors":["red","black","crimson","teal"],
-          "count": 1
-        }
-    ];
-
-    var myRef = React.createRef();
-
-    function handleTab(index2) {
-        index = index2;
-        const images = myRef.current.children;
-        for(let i=0; i<images.length; i++){
-          images[i].className = images[i].className.replace("active", "");
-        }
-        images[index].className = "active";
-      };
-    
-    function componentDidMount() {
-        myRef.current.children[index].className = "active";
-    }
+  function handleDelete(id)
+  {
+    dispatch(deleteVehicle(id));
+    history.push('/vehicle')
+  }
 
   return (
     <div>
@@ -111,14 +48,14 @@ const VehicleDetail = props => {
         <NavigationBar></NavigationBar>
       </div>
       <div className="app" style={{"box-shadow": "0 0 5px #ccc"}}>
-          <div className="details" key={currentCar.id}>
+          <div className="details" key={currentVehicle.id}>
             <div className="big-img" style={{"width": "100%"}}>
-              {imagesByCarId.length > 0 ? (
+              {currentVehicle.vehicleImages.length > 0 ? (
                 <AliceCarousel autoPlay autoPlayInterval="3000">
-                {imagesByCarId.map((image) => (
+                {currentVehicle.vehicleImages.map((image) => (
                   <img
                     key={image.id}
-                    src={image.imagePath}
+                    src={directoryPath + image.fileInformationId + ".jpg"}
                     className="sliderimg"
                   />
                 ))}
@@ -127,20 +64,44 @@ const VehicleDetail = props => {
                 <img src="https://nepalcarsrental.com/assets/images/NoCar.jpg" alt=""/>
               )}
             </div>
-
+            <Popup
+              title="Vehicle Form"
+              openPopup={openPopup}
+              setOpenPopup={setOpenPopup}>
+              <VehicleForm
+                recordForEdit={true}
+                content={currentVehicle} 
+                setOpenPopup={setOpenPopup}
+              />
+            </Popup>
             <div className="box">
               <div className="row">
-                <h2>{currentCar.modelYear}</h2>
-                <span>${currentCar.dailyPrice}</span>
+                <h2>{currentVehicle.name}</h2>
+                <span>{currentVehicle.code}</span>
               </div>
-              <Colors colors={products[0].colors} />
+              <h4 style={{"margin-bottom": "1px" }}><FaIcons.FaRoad /> Kilometer Traveled: {currentVehicle.kilometerTravel} km</h4>
+              <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaIdCard /> License Plate: {currentVehicle.licensePlate} </h4>
+              <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaMoneyCheck /> Rental Price: {currentVehicle.rentalPrice} $</h4>
+              <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaMoneyBill /> Deposit Price: {currentVehicle.depositPrice} $</h4>
+              <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaCheck /> Vehicle Type: {currentVehicle.vehicleType.name}</h4>
+              <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaCheck /> Vehicel Line: {currentVehicle.vehicleLine.name}</h4>
+              <div className="properties">
+              <h4 style={{"margin-top": "18px", "margin-bottom": "20px" }}><FaIcons.FaSlidersH /> Properties: {currentVehicle.vehicleProperties.map((prop) =>(<span class="tag-input1">{prop.vehicleTypeDetail.name}</span>))}
+              </h4>
+              </div>
+              {/* <Colors colors={products[0].colors} /> */}
 
-              <p>{currentCar.description}</p>
-              <p>{products[0].colors}</p>
-              <button className="cart">Add to cart</button>
+              {/* <p>{currentVehicle.description}</p> */}
+              {/* <p>{products[0].colors}</p> */}
+              <button className="cart">Add to cart</button> 
+              <div>
+                <button className="cart" style={{"margin-right": "10px", "background-color":"#38A793"}} onClick={() => setOpenPopup(true)}><FaIcons.FaEdit /></button> 
+                <button className="cart" style={{"background-color":"#EC7575"}} onClick={() => handleDelete(currentVehicle.id)}><FaIcons.FaTrash /></button>
+              </div>
             </div>
           </div>
       </div>
+      <FooterContainer></FooterContainer>
   </div>
   );
 };

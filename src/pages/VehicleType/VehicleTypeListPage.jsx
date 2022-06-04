@@ -11,7 +11,7 @@ import Controls from './../../components/controls/Controls';
 import { makeStyles} from '@material-ui/core';
 import {
   deleteVehicleType,
-  getList,
+  getVehicleTypeList,
   setDeletedItem
 } from "../../redux/vehicleSlice/vehicleTypeSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -54,7 +54,7 @@ const VehicleTypeList = props => {
   ]
 
   useEffect(() => {
-    dispatch(getList({keyWord:keyWord, skipCount:0}))
+    dispatch(getVehicleTypeList({keyWord:keyWord, skipCount:0}))
   },[])
 
   useEffect(() => {
@@ -70,11 +70,11 @@ const VehicleTypeList = props => {
 
   const onPageChange = page => {
     setCurrentPage(page);
-    dispatch(getList({keyWord:keyWord, skipCount:(page-1)*10}))
+    dispatch(getVehicleTypeList({keyWord:keyWord, skipCount:(page-1)*10}))
   }
 
   useEffect(() => {
-    dispatch(getList({keyWord:keyWord, skipCount:0}))
+    dispatch(getVehicleTypeList({keyWord:keyWord, skipCount:0}))
   },[keyWord])
 
   return (

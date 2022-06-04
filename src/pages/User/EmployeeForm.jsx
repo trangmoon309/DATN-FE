@@ -66,6 +66,7 @@ export default function EmployeeForm() {
         e.preventDefault();
         let reader = new FileReader();
         let filex = e.target.files[0];
+        console.log(filex);
         //console.log('handle uploading----', filex);
         reader.onloadend = () => {
           setFile(filex);

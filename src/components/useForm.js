@@ -17,6 +17,36 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
             validate({ [name]: value })
     }
 
+    // Vehicle
+    const handleVehicleTypeSelectChange = (e, vehicleTypes, setProps) => {
+        const { name, value } = e.target;
+        setValues({
+            ...values,
+            [name]: value,
+          });
+        if (validateOnChange)
+            validate({ [name]: value })
+        const targetIndex = vehicleTypes.findIndex(f=>f.id==value); 
+        let object = vehicleTypes[targetIndex]; 
+        setProps(object.vehicleTypeDetails);
+    }
+
+    const handleVehiclePropertiesSelectChange = (e, setValueItems) => {
+        const { name, value } = e.target;
+        setValueItems(
+            // On autofill we get a the stringified value.
+            typeof value === "string" ? value.split(",") : value
+        );
+        var list = [];
+        value.forEach((item) => {
+            list.push({[name]: item})
+        });
+        setValues({
+            ...values,
+            vehicleProperties: list    
+        });
+    }
+
     // Vehicle Type
     const handleVehicleTypePropsChange = e => {
         const { name, value } = e.target;
@@ -110,6 +140,8 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
         handleVehicleTypePropsChange,
         handleVehicleTypePropRemove,
         handleVehicleTypePropAdd,
+        handleVehicleTypeSelectChange,
+        handleVehiclePropertiesSelectChange,
         resetForm,
         resetFormProfile,
     }
