@@ -13,8 +13,33 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
             ...values,
             [name]: value,
           });
-        if (validateOnChange)
-            validate({ [name]: value })
+        // if (validateOnChange)
+        //     validate({ [name]: value })
+    }
+
+    // User Transaction
+    const handleReceiveDateChange = e => {
+        const { name, value } = e.target;
+        var x = new Date(values["receivedVehicleDate"]);
+        var receivedDate = new Date(x.getUTCFullYear(), x.getUTCMonth(), x.getDate());
+        var returnDate = new Date(value);
+        const diffTime = Math.abs(returnDate - receivedDate);
+        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+        console.log(values);
+        let userTransactionVehicles = values.userTransactionVehicles;
+        let totalCost = 0;
+        if(userTransactionVehicles.length > 0){
+            userTransactionVehicles.forEach(item => {
+                totalCost += item.vehicle.rentalPrice;
+            })
+        }
+        
+        setValues({
+            ...values,
+            ["totalDays"]: diffDays,
+            ["totalCost"]: totalCost,
+            [name]: value,
+          });
     }
 
     // Vehicle
@@ -142,6 +167,7 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
         handleVehicleTypePropAdd,
         handleVehicleTypeSelectChange,
         handleVehiclePropertiesSelectChange,
+        handleReceiveDateChange,
         resetForm,
         resetFormProfile,
     }

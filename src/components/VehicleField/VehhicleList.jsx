@@ -84,16 +84,13 @@ function VehicleList() {
   },[])
 
   useEffect(() => {
-    dispatch(getVehicleList({keyWord:keyWord, skipCount:0}))
-  },[keyWord])
-
-  useEffect(() => {
-    dispatch(getVehicleList({vehicleLineId: filterVehicleLine, keyWord:keyWord, skipCount:0}))
-  },[filterVehicleLine])
-
-  useEffect(() => {
-    dispatch(getVehicleList({vehicleTypeId: filterVehicleType, keyWord:keyWord, skipCount:0}))
-  },[filterVehicleType])
+    dispatch(getVehicleList({
+      keyWord:keyWord != null ? keyWord : null, 
+      skipCount:0,
+      vehicleLineId: filterVehicleLine != null ? filterVehicleLine : null,
+      vehicleTypeId: filterVehicleType != null ? filterVehicleType : null
+    }))
+  },[keyWord, filterVehicleLine, filterVehicleType])
 
   useEffect(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;

@@ -113,10 +113,10 @@ const VehicleLineList = props => {
             </tr>
           </thead>
           <tbody>
-            {vehicleLines.map(item => {
+            {vehicleLines.map((item,index) => {
               return (
                 <tr>
-                  <td>{item.id}</td>
+                  <td>{currentPage > 1 ? (index + 1)*(currentPage - 1)+ PageSize : index + 1}</td>
                   <td>{item.code}</td>
                   <td>{item.name}</td>
                   <td>{item.creationTime}</td>

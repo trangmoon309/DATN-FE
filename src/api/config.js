@@ -54,3 +54,16 @@ export const VehicleEndpoint = {
     GetListByCondition
 }
 
+// User Transaction
+const UserTransaction = 'user-transactions';
+export const UserTransactionEndpoint = {
+    UserTransaction
+}
+
+// User Cart
+const UserCart = 'user-carts';
+const GetByUser = 'by-user';
+export const UserCartEndpoint = {
+    UserCart,
+    GetByUser
+}

@@ -1,13 +1,9 @@
 import React from "react";
-import { useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
-import { setInputText } from "../../redux/searchBarSlice/searchBarSlice";
 
 function Logo() {
   const history = useHistory();
-  const dispatch = useDispatch();
   function clickHandler() {
-    dispatch(setInputText(""));
     history.push('/')
   }
   return (
