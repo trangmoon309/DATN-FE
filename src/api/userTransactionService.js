@@ -81,10 +81,13 @@ export default class UserTransactionService{
         "receivedVehicleDate": object.receivedVehicleDate,
         "returnedVehicleDate": object.returnedVehicleDate,
         "totalCost": object.totalCost,
+        "depositCosted": object.depositCosted,
+        "totalDays": object.totalDays,
         "cancelReason": object.cancelReason,
         "reviewServiceQuality": object.reviewServiceQuality,
         "costStatus": object.costStatus,
         "rentalStatus": object.rentalStatus,
+        "userTransactionVehicles": object.userTransactionVehicles,
     };
     return await axios
       .request({

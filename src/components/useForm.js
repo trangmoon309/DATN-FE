@@ -18,14 +18,20 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
     }
 
     // User Transaction
+    function convert(str) {
+        var date = new Date(str),
+          mnth = ("0" + (date.getMonth() + 1)).slice(-2),
+          day = ("0" + date.getDate()).slice(-2);
+        return [date.getFullYear(), mnth, day].join("-");
+    }
+
     const handleReceiveDateChange = e => {
         const { name, value } = e.target;
-        var x = new Date(values["receivedVehicleDate"]);
-        var receivedDate = new Date(x.getUTCFullYear(), x.getUTCMonth(), x.getDate());
+        var receivedDate = new Date(convert(values.receivedVehicleDate));
         var returnDate = new Date(value);
         const diffTime = Math.abs(returnDate - receivedDate);
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
-        console.log(values);
+
         let userTransactionVehicles = values.userTransactionVehicles;
         let totalCost = 0;
         if(userTransactionVehicles.length > 0){

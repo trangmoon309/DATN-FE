@@ -31,15 +31,16 @@ const TransactionList = props => {
 
   let rentalStatusOptions = [
     {"setSelected":setFilterRentalStatus},
-    {"value":0,"label": "Waiting",},
+    {"value":0,"label": "Waiting for rentaling",},
     {"value":1,"label": "Using",},
-    {"value":2,"label": "Returned"}
+    {"value":2,"label": "Returned"},
+    {"value":3,"label": "Cancel paying"}
   ];
   let costStatusOptions = [
     {"setSelected":setFilterCostStatus},
-    {"value":0,"label": "Waiting",},
-    {"value":1,"label": "Done",},
-    {"value":2,"label": "Cancel"}
+    {"value":0,"label": "Deposited",},
+    {"value":1,"label": "Waiting for paying",},
+    {"value":2,"label": "Payed"}
   ];
 
   const options = [
@@ -55,6 +56,8 @@ const TransactionList = props => {
       rentalStatus:null
     }}))
   },[])
+
+  console.log(userTransactions);
 
   useEffect(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;

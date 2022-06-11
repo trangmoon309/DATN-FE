@@ -11,35 +11,34 @@ import { useDispatch } from "react-redux";
 import './rating.css';
 
 export default function TransactionDetailForm(props) {
-    const {content} = props
+    const {content, setOpenPopup} = props
     const dispatch = useDispatch();
-    
+
     const {
         values,
-        setValues,
-        errors,
-        setErrors,
         handleInputChange,
         handleReceiveDateChange,
         resetForm
     } = useForm(content, true, null);
 
     const handleSubmit = e => {
-        console.log(values.returnedVehicleDate);
-        // dispatch(updateUserTransaction(values)).then((result) => {
-        //     }).catch((error) => {
-        // });
+        //console.log(values);
+        dispatch(updateUserTransaction(values)).then((result) => {
+            setOpenPopup(false);
+            }).catch((error) => {
+        });
     }
 
     let rentalStatusOptions = [
         {"name":"Waiting for rentaling","id": 0},
         {"name":"Using","id": 1},
-        {"name":"Returned","id": 2}
+        {"name":"Returned","id": 2},
+        {"name":"Cancel paying","id": 3}
       ];
     let costStatusOptions = [
-        {"name":"Waiting for paying","id": 0,},
-        {"name":"Payed","id": 1,},
-        {"name":"Cancel","id": 2}
+        {"name":"Deposited","id": 0},
+        {"name":"Waiting for paying","id": 1},
+        {"name":"Payed","id": 2}
     ];
     let reviewServiceQualityOptions = [
         {"name":"0","id": 0,},
@@ -50,11 +49,20 @@ export default function TransactionDetailForm(props) {
         {"name":"5","id": 5,},
     ];
 
-    var x = new Date(values.receivedVehicleDate)
-    var receivedDate = new Date(x.getUTCFullYear(), x.getUTCMonth(), x.getDate());
-    var datestring = receivedDate.getFullYear()  + "-" + (receivedDate.getMonth()+1) + "-" + receivedDate.getDate();
+    function formatDate(date) {
+        var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+    
+        if (month.length < 2) 
+            month = '0' + month;
+        if (day.length < 2) 
+            day = '0' + day;
+    
+        return [year, month, day].join('-');
+    }
 
-    //console.log(datestring);
     return (
         <Form>
             <p>{values.user.name + " " + values.user.surname}</p>
@@ -63,8 +71,8 @@ export default function TransactionDetailForm(props) {
                     <Controls.Date
                         name="receivedVehicleDate"
                         label="Received Date"
-                        value={datestring}
-                        disable
+                        value={formatDate(new Date(values.receivedVehicleDate))}
+                        onChange={handleReceiveDateChange}
                     /> 
                     <Controls.Date
                         name="returnedVehicleDate"
