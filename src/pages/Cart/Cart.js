@@ -1,69 +1,90 @@
-import React, { createContext, useContext, useReducer } from "react";
+import React, { useState,useEffect } from 'react';
 import "./cart.css";
-import { products } from "./product";
-import ContextCart from "./ContextCart";
 import reducer from "./reducer";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import { FooterContainer } from "../../components/Footer/FooterContainer";
-
-// create a context
-export const CartContext = createContext();
-
-const initialState = {
-  item: products,
-  totalAmount: 25600,
-  totalItems: 0,
-  quantity: 1,
-};
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
+import {
+  clearItems,
+  getUserCartList,
+  removeItem,
+  increaseItemAmount,
+  decreaseItemAmount,
+  updateUserCart
+} from "../../redux/cartSlice/userCartSlice";
+import ContextCart from './ContextCart';
 
 const Cart = () => {
   // inPlace of useState we will use the useReducer Hook
   // const [item, setItem] = useState(products);
+  const dispatch = useDispatch();
+  const userCarts = useSelector(state => state.userCart.items);
+  const totalItems = useSelector(state => state.userCart.totalItems);
+  const totalAmounts = useSelector(state => state.userCart.totalAmounts);
 
-  const [state, dispatch] = useReducer(reducer, initialState);
+  useEffect(() => {
+    if(userCarts.length == 0){
+      dispatch(getUserCartList({skipCount:0, userId:'3a03c0bf-7649-7d45-9de9-661281763325'})).then(res => {
+        //console.log(userCarts);
+      })
+    }
+  },[]);
+
+  //const [state, dispatch] = useReducer(reducer, initialState);
+
 
   const clearCart = () => {
+    dispatch(clearItems());
     return dispatch({ type: "CLEAR_CART" });
   };
 
-  const removeItem = (id) => {
-    return dispatch({
+  const remove = (id) => {
+    return dispatch(removeItem({
       type: "REMOVE_ITEM",
-      payload: id,
-    });
+      id: id,
+    }));
   };
 
   const increment = (id) => {
-    return dispatch({
+    return dispatch(increaseItemAmount({
       type: "INCREMENT",
-      payload: id,
-    });
+      id: id,
+    }));
   };
 
   const decrement = (id) => {
-    return dispatch({
+    return dispatch(decreaseItemAmount({
       type: "DECREMENT",
-      payload: id,
-    });
+      id: id,
+    }));
+  };
+
+  const checkout = () => {
+    return dispatch(updateUserCart({
+      userId: '3a03c0bf-7649-7d45-9de9-661281763325',
+      objects: userCarts,
+    }));
   };
 
   return (
     <div>
       <NavigationBar></NavigationBar>
       <div style={{"margin":"80px"}}>
-        <CartContext.Provider
-          value={{ ...state, clearCart, removeItem, increment, decrement }}>
-          <ContextCart />
-        </CartContext.Provider>
+        <ContextCart
+          items={userCarts}
+          totalAmounts={totalAmounts}
+          totalItems={totalItems}
+          clearCart={clearCart}
+          removeItem={remove}
+          increment={increment}
+          decrement={decrement}
+          submitHandler={checkout}
+        />
       </div>
       <FooterContainer></FooterContainer>
     </div>
   );
-};
-
-// custom Hook
-export const useGlobalContext = () => {
-  return useContext(CartContext);
 };
 
 export default Cart;

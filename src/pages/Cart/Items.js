@@ -1,32 +1,33 @@
-import React, { useContext } from "react";
-import { CartContext } from "./Cart";
+import React from "react";
 import * as FaIcons from 'react-icons/fa';
 
-const Items = ({ id, title, description, price, img, quantity }) => {
-  const { removeItem, increment, decrement } = useContext(CartContext);
+const Items = props => {
+  const { content, removeItem, increment, decrement } = props;
+  const directoryPath = "http://localhost:3333/vehicle-images/";
+  var imgURL = content.vehicle.vehicleImages.length > 0 ? directoryPath + content.vehicle.vehicleImages[0].fileInformationId + ".jpg" : "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
   return (
     <>
       <div className="items-info">
         <div className="product-img">
-          <img src={img} alt="tp" />
+          <img src={imgURL} alt="tp" />
         </div>
 
         <div className="title">
-          <h2>{title}</h2>
-          <p>{description}</p>
+          <h2>{content.title}</h2>
+          <p>{content.description}</p>
         </div>
         <div className="add-minus-quantity">
-          <i onClick={() => decrement(id)}><FaIcons.FaMinus /></i>
-          <input type="text" placeholder={quantity} disabled />
-          <i onClick={() => increment(id)}><FaIcons.FaPlus /></i>
+          <i onClick={() => decrement(content.id)}><FaIcons.FaMinus /></i>
+          <input type="text" placeholder={content.quantity} disabled />
+          <i onClick={() => increment(content.id)}><FaIcons.FaPlus /></i>
         </div>
         <div className="price">
-          <h3>{price}</h3>
+          <h3>{content.price}</h3>
         </div>
         <div className="remove-item">
           <i
             className="fas fa-trash-alt remove"
-            onClick={() => removeItem(id)}></i>
+            onClick={() => removeItem(content.id)}></i>
         </div>
       </div>
       <hr />

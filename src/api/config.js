@@ -56,8 +56,10 @@ export const VehicleEndpoint = {
 
 // User Transaction
 const UserTransaction = 'user-transactions';
+const Summary = 'summary';
 export const UserTransactionEndpoint = {
-    UserTransaction
+    UserTransaction,
+    Summary
 }
 
 // User Cart

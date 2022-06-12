@@ -35,6 +35,14 @@ export const deleteUserTransaction = createAsyncThunk(
   }
 );
 
+export const summary = createAsyncThunk(
+  "userTransaction/summary",
+  async () => {
+    const response = await service.summary();
+    return response.data;
+  }
+);
+
 export const userTransactionSlice = createSlice({
   name: "userTransaction",
   initialState: {

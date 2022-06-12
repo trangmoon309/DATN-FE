@@ -12,7 +12,7 @@ export default class UserCartService{
   getList = async(skipCount, userId) => {
     var parameters = {
       "skipCount": skipCount,
-      "maxResultCount": 10
+      "maxResultCount": 1000
     };
     
     return await axios
@@ -53,15 +53,17 @@ export default class UserCartService{
       });
   };
 
-  update = async (object) => {
-    var reqData = {
-        "userId": object.userId,
-        "vehicleId": object.vehicleId,
-        "quantity": object.quantity
-    };
+  update = async (userId, object) => {
+    var reqData = [];
+    object.forEach(item => reqData.push({
+      "id": item.id,
+      "userId": item.userId,
+      "vehicleId": item.vehicleId,
+      "quantity": item.quantity
+    }));
     return await axios
       .request({
-        url: `${UserCartEndpoint.UserCart}/${object.id}`,
+        url: `${UserCartEndpoint.UserCart}/${userId}`,
         method: "put",
         baseURL: `${API_URL}`,
         withCredentials: true,

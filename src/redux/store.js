@@ -5,7 +5,7 @@ import vehicleLineSlice from "./vehicleSlice/vehicleLineSlice";
 import vehicleTypeSlice from "./vehicleSlice/vehicleTypeSlice";
 import vehicleSlice from "./vehicleSlice/vehicleSlice";
 import userTransactionSlice from "./transactionSlice/userTransactionSlice";
-import userCartSlice from "./transactionSlice/userCartSlice";
+import userCartSlice from "./cartSlice/userCartSlice";
 
 export default configureStore({
   reducer: {

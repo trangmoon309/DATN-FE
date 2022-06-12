@@ -9,6 +9,21 @@ export default class UserTransactionService{
     return localStorage.getItem("_token");
   };
 
+  summary = async() => {
+    
+    return await axios
+      .request({
+        url: `${UserTransactionEndpoint.UserTransaction}/${UserTransactionEndpoint.Summary}`,
+        method: "get",
+        baseURL: `${API_URL}`,
+        withCredentials: true,
+      })
+      .then((response) => {
+        return Promise.resolve(response);
+      })
+      .catch((err) => Promise.reject(err));
+  }
+
   getList = async(skipCount, searchRequest) => {
     var parameters = {
       "skipCount": skipCount,
