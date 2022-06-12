@@ -20,10 +20,12 @@ export const HttpMethod = {
 const Profile = '/users/current';
 const ProfileAvatar = '/users/avatar/current';
 const Register = '/users';
+const GetUserList = '/users';
 export const UserEndpoint = {
     Profile,
     Register,
     ProfileAvatar,
+    GetUserList
 }
 
 // Profile

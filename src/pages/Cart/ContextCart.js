@@ -49,8 +49,9 @@ const ContextCart = props => {
           <h3>
             card total: <span> {totalAmounts}₹ </span>
           </h3>
-          <button onClick={submitHandler}>CheckOut</button>
+          <button onClick={submitHandler}>Save Change</button>
           <button onClick={clearCart} style={{"margin-left":"20px", "background-color":"#861717"}}>Clear Cart</button>
+          <button style={{"margin-left":"20px", "background-color":"#FF3A06"}}>Checkout</button>
         </div>
       </section>
     </>

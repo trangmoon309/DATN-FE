@@ -10,6 +10,13 @@ export const logUserIn = createAsyncThunk(
     return res.data;
 });
 
+export const getUserList = createAsyncThunk(
+  "user/getUserList",
+  async () => {
+    var res = await authService.getList();
+    return res.data;
+});
+
 export const getCurrentUser = createAsyncThunk(
   "user/getCurrentUser",
   async () => {
@@ -64,6 +71,7 @@ export const updateAvatar = createAsyncThunk(
 export const userSlice = createSlice({
   name: "user",
   initialState: {
+    allUsers:[],
     currentUser: null,
     admin:false,
     loggedIn: false,
@@ -94,6 +102,9 @@ export const userSlice = createSlice({
     },
     [getCurrentUser.fulfilled]: (state, action) => {
       state.currentUser = action.payload;
+    },
+    [getUserList.fulfilled]: (state, action) => {
+      state.allUsers = action.payload.items;
     },
     [updateProfile.fulfilled]: (state, action) => {
       state.currentUser = action.payload;

@@ -35,8 +35,8 @@ export const deleteUserTransaction = createAsyncThunk(
   }
 );
 
-export const summary = createAsyncThunk(
-  "userTransaction/summary",
+export const getSummary = createAsyncThunk(
+  "userTransaction/getSummary",
   async () => {
     const response = await service.summary();
     return response.data;
@@ -49,6 +49,7 @@ export const userTransactionSlice = createSlice({
     items: [],
     deletedItem : null,
     totalUserTransaction : 0,
+    summary:{}
   },
   reducers: {
     setDeletedItem: (state,action) => {
@@ -56,6 +57,9 @@ export const userTransactionSlice = createSlice({
     }
   },
   extraReducers: {
+    [getSummary.fulfilled]: (state, action) => {
+      state.summary = action.payload;
+    },
     [getUserTransactionList.fulfilled]: (state, action) => {
       state.items = action.payload.items;
       state.totalUserTransaction = action.payload.totalCount;

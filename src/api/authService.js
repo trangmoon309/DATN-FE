@@ -44,6 +44,25 @@ export default class AuthService{
       });
   };
 
+  getList = async() => {
+    var reqData = {
+      "skipCount": 1,
+      "maxResultCount": 10,
+    }
+    return await axios
+      .request({
+        url: `${UserEndpoint.GetUserList}`,
+        method: "get",
+        baseURL: `${API_URL}`,
+        withCredentials: true,
+        data: reqData
+      })
+      .then((response) => {
+        return Promise.resolve(response);
+      })
+      .catch((err) => Promise.reject(err));
+  }
+
   getCurrentUser = async() => {
     return await axios
       .request({

@@ -49,14 +49,15 @@ export const userCartSlice = createSlice({
       state.deletedItem = action.payload
     },
     clearItems: (state,action) => {
-      state.items = []
+      state.items = [];
+      state.totalAmounts = 0;
+      state.totalItems = 0;
     },
     removeItem: (state,action) => {
       console.log(action.payload);
       state.items = state.items.filter(x => action.payload.id !== x.id)
     },
     increaseItemAmount:(state,action) => {
-      console.log(action);
       var item = state.items.find(x => action.payload.id == x.id)
       if(item != null){
         item.quantity = item.quantity + 1;
@@ -64,6 +65,7 @@ export const userCartSlice = createSlice({
         const targetIndex = state.items.findIndex(f=>f.id===action.payload.id); 
         list[targetIndex] = item;
         state.items = list;
+        state.totalAmounts = state.totalAmounts + item.vehicle.depositPrice;
       }
     },
     decreaseItemAmount:(state,action) => {
@@ -79,6 +81,7 @@ export const userCartSlice = createSlice({
           const targetIndex = state.items.findIndex(f=>f.id===action.payload.id); 
           list[targetIndex] = item;
           state.items = list;
+          state.totalAmounts = state.totalAmounts - item.vehicle.depositPrice;
         }
       }
     }
@@ -87,6 +90,9 @@ export const userCartSlice = createSlice({
     [getUserCartList.fulfilled]: (state, action) => {
       state.items = action.payload.items;
       state.totalItems = action.payload.totalCount;
+      action.payload.items.forEach(item => {
+        state.totalAmounts = state.totalAmounts + item.vehicle.depositPrice;      
+      });
     },
     [createUserCart.fulfilled]: (state, action) => {
       state.items.unshift(action.payload)

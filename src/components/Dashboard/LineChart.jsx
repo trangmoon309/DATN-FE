@@ -22,7 +22,7 @@ const data = {
   ]
 };
 
-export default function LineChart() {
+export default function LineChart({datas}) {
   Chart.register(CategoryScale)
   return (
     <div className="App">

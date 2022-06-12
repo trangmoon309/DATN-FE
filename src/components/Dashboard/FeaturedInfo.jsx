@@ -1,15 +1,15 @@
 import "./featuredInfo.css";
 import { ArrowDownward, ArrowUpward } from "@material-ui/icons";
 
-export default function FeaturedInfo() {
+export default function FeaturedInfo({data}) {
   return (
     <div className="featured">
       <div className="featuredItem">
         <span className="featuredTitle">Avarage Quality Review</span>
         <div className="featuredMoneyContainer">
-          <span className="featuredMoney">2,4</span>
+          <span className="featuredMoney">{data.qualityReview}</span>
           <span className="featuredMoneyRate">
-            -11.4 <ArrowDownward  className="featuredIcon negative"/>
+           {data.qualityReviewDifference} <ArrowDownward  className={data.qualityReviewDifference > 0 ?"featuredIcon":"featuredIcon negative" }/>
           </span>
         </div>
         <span className="featuredSub">Compared to last month</span>
@@ -17,9 +17,9 @@ export default function FeaturedInfo() {
       <div className="featuredItem">
         <span className="featuredTitle">Average Income</span>
         <div className="featuredMoneyContainer">
-          <span className="featuredMoney">$4,415</span>
+          <span className="featuredMoney">${data.averageIncome}</span>
           <span className="featuredMoneyRate">
-            -1.4 <ArrowDownward className="featuredIcon negative"/>
+          ${data.averageIncomeDifference} <ArrowDownward className={data.averageIncomeDifference > 0 ?"featuredIcon":"featuredIcon negative" }/>
           </span>
         </div>
         <span className="featuredSub">Compared to last month</span>
@@ -27,9 +27,9 @@ export default function FeaturedInfo() {
       <div className="featuredItem">
         <span className="featuredTitle">Transaction Cancel</span>
         <div className="featuredMoneyContainer">
-          <span className="featuredMoney">225</span>
+          <span className="featuredMoney">{data.transactionCancel}</span>
           <span className="featuredMoneyRate">
-            +2.4 <ArrowUpward className="featuredIcon"/>
+            {data.transactionCancelDifference} <ArrowUpward className={data.transactionCancelDifference > 0 ?"featuredIcon":"featuredIcon negative" }/>
           </span>
         </div>
         <span className="featuredSub">Compared to last month</span>

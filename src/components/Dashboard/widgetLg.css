@@ -43,17 +43,20 @@
   border-radius: 10px;
 }
 
-.widgetLgButton.Approved{
-    background-color: #e5faf2;
-    color: #3bb077;
+.widgetLgButton.Waiting{
+    background-color: #b08d3b;
+    color: #f5f6f9;
 }
-.widgetLgButton.Declined{
-    background-color: #fff0f1;
-    color: #d95087;
-
+.widgetLgButton.Using{
+    background-color: #3bb077;
+    color: #f5f6f9;
 }
-.widgetLgButton.Pending{
-    background-color: #ebf1fe;
-    color: #2a7ade;
+.widgetLgButton.Returned{
+    background-color: #2a7ade;
+    color: #f5f6f9;
+}
 
+.widgetLgButton.Cancel{
+  background-color: #d95087;
+  color: #f5f6f9;
 }
