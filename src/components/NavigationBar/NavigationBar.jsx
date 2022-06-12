@@ -8,25 +8,48 @@ import { IconContext } from 'react-icons';
 import Logo from './Logo';
 import {
   setLoggedInFalse,
-  logCustomerOut
+  logCustomerOut,
+  setLoggedInTrue,
+  setAdminTrue,
+  setAdminFalse,
+  setCurrentUser
 } from "../../redux/userSlice/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
 
 function NavigationBar() {
   const [sidebar, setSidebar] = useState(false);
-  const loggedIn = useSelector((state) => state.user.loggedIn);
+  const isLoggedIn = useSelector((state) => state.user.loggedIn);
   const showSidebar = () => setSidebar(!sidebar);
   const dispatch = useDispatch();
-  const history = useHistory()
+  const history = useHistory();
+  const admin = useSelector(state => state.user.admin);
 
   function handleLog() {
-    if(loggedIn){
+    if(isLoggedIn){
       dispatch(setLoggedInFalse());
       dispatch(logCustomerOut());
     }
     history.push('/signin');  
   }
+
+  useEffect(() => {
+    if(localStorage.getItem("user") != null && isLoggedIn == false){
+      dispatch(setLoggedInTrue());
+      const currentUser = JSON.parse(localStorage.getItem("user"));
+      dispatch(setCurrentUser({
+        user: currentUser,
+      }));
+      console.log(currentUser.userRoles);
+      if(currentUser.userRoles.length > 0 && currentUser.userRoles[0].role.name == "admin"){
+        dispatch(setAdminTrue());
+      }
+      else{
+        dispatch(setAdminFalse());
+        history.push('/vehicle');  
+      }
+    };
+  },[])
 
   return (
     <>
@@ -39,15 +62,19 @@ function NavigationBar() {
             <Logo />
           </div>
           <div className='menu-bars-right'>
+          {isLoggedIn ? (
             <Link to='/profile' className='menu-bars-right-item'>
-              <FaIcons.FaUser />
-            </Link>
+            <FaIcons.FaUser />
+          </Link>
+          ):(<></>)}
+          {isLoggedIn ? (
             <Link to='cart' className='menu-bars-right-item'>
-              <FaIcons.FaShoppingCart />
+            <FaIcons.FaShoppingCart />
             </Link>
-            <button onClick={handleLog} className='menu-bars-right-item'>
-              <FaIcons.FaSignInAlt />
-            </button>
+          ):(<></>)}
+          <button onClick={handleLog} className='menu-bars-right-item'>
+            <FaIcons.FaSignInAlt />
+          </button>
           </div>
         </div>
         <nav className={sidebar ? 'nav-menu active' : 'nav-menu'}>
@@ -59,12 +86,15 @@ function NavigationBar() {
             </li>
             {SidebarData.map((item, index) => {
               return (
+                admin == false && item.isForClient == false ? (
+                  <></>
+                ) : (                  
                 <li key={index} className={item.cName}>
                   <Link to={item.path}>
                     {item.icon}
                     <span>{item.title}</span>
                   </Link>
-                </li>
+                </li>)
               );
             })}
           </ul>

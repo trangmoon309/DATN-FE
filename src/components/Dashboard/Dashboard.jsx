@@ -8,31 +8,53 @@ import { FooterContainer } from './../Footer/FooterContainer';
 import React, { useState,useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getUserList
+  getUserList,
+  setLoggedInTrue,
+  setAdminTrue,
+  setAdminFalse,
+  setCurrentUser
 } from "../../redux/userSlice/userSlice";
 import {
   getUserTransactionList,
-  getSummary
+  getSummary,
 } from "../../redux/transactionSlice/userTransactionSlice";
+import { useHistory } from "react-router";
 
 export default function Dashboard() {
   const dispatch = useDispatch();
   const users = useSelector(state => state.user.allUsers);
   const userTransactions = useSelector(state => state.userTransaction.items);
   const summary = useSelector(state => state.userTransaction.summary);
+  const admin = useSelector(state => state.user.admin);
+  const loggedIn = useSelector(state => state.user.loggedIn);
+  const history = useHistory()
 
   useEffect(() => {
-    dispatch(getUserList());
-    dispatch(getUserTransactionList({skipCount:0,searchRequest:{
-      userId:null,
-      keyWord:null,
-      costStatus:null,
-      rentalStatus:null
-    }}));
-    dispatch(getSummary());
+    if(localStorage.getItem("user") != null && loggedIn == false){
+      dispatch(setLoggedInTrue());
+      const currentUser = JSON.parse(localStorage.getItem("user"));
+      dispatch(setCurrentUser({
+        user: currentUser,
+      }));
+      if(currentUser.userRoles.length > 0 && currentUser.userRoles[0].role.name == "admin"){
+        dispatch(setAdminTrue());
+      }
+      else{
+        dispatch(setAdminFalse());
+        history.push('/vehicle');  
+      }
+    };
+    if(admin == true){
+      dispatch(getUserList());
+      dispatch(getUserTransactionList({skipCount:0,searchRequest:{
+        userId:null,
+        keyWord:null,
+        costStatus:null,
+        rentalStatus:null
+      }}));
+      dispatch(getSummary());
+    }
   },[])
-
-  console.log(summary);
 
   return (
     <div>

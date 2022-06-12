@@ -79,7 +79,7 @@ export const userSlice = createSlice({
   },
   reducers: {
     setCurrentUser: (state, action) => {
-      state.currentUser = action.payload;
+      state.currentUser = action.payload.user;
     },
     setLoggedInTrue: (state) => {
       state.loggedIn = true;
@@ -94,6 +94,9 @@ export const userSlice = createSlice({
     },
     setAdminTrue: (state) => {
       state.admin = true
+    },
+    setAdminFalse: (state) => {
+      state.admin = false
     }
   },
   extraReducers: {
@@ -102,6 +105,8 @@ export const userSlice = createSlice({
     },
     [getCurrentUser.fulfilled]: (state, action) => {
       state.currentUser = action.payload;
+      console.log(action.payload);
+      state.admin = action.payload.userRoles.length > 0 ?  (action.payload.userRoles[0].role.name == "admin" ? true : false) : false;
     },
     [getUserList.fulfilled]: (state, action) => {
       state.allUsers = action.payload.items;
@@ -117,6 +122,6 @@ export const userSlice = createSlice({
   },
 });
 
-export const {setCurrentUser, setLoggedInTrue, logCustomerOut, setAdminTrue, setLoggedInFalse} =
+export const {setCurrentUser, setLoggedInTrue, logCustomerOut, setAdminTrue, setLoggedInFalse, setAdminFalse} =
 userSlice.actions;
 export default userSlice.reducer;

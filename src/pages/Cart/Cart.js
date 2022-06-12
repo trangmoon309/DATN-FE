@@ -22,10 +22,11 @@ const Cart = () => {
   const userCarts = useSelector(state => state.userCart.items);
   const totalItems = useSelector(state => state.userCart.totalItems);
   const totalAmounts = useSelector(state => state.userCart.totalAmounts);
+  const currentUser = JSON.parse(localStorage.getItem("user"));
 
   useEffect(() => {
     if(userCarts.length == 0){
-      dispatch(getUserCartList({skipCount:0, userId:'3a03c0bf-7649-7d45-9de9-661281763325'})).then(res => {
+      dispatch(getUserCartList({skipCount:0, userId:currentUser.id})).then(res => {
         //console.log(userCarts);
       })
     }
