@@ -72,7 +72,10 @@ export default class UserTransactionService{
         data: reqData
       })
       .then((response) => {
-        toast.success("Successfully created! ") 
+        toast.success("Successfully created! ");
+        localStorage.removeItem("receivedDate");
+        localStorage.removeItem("totalDays");
+        localStorage.removeItem("cart");
         return Promise.resolve(response);
       })
       .catch((err) =>{
