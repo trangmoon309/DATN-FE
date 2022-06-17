@@ -14,7 +14,6 @@ export default function AvatarForm(props) {
 
   useEffect(() => {
     setImagePreview(<img src={imagePreviewUrl} />);
-    console.log(file);
   },[imagePreviewUrl]);
   
   return (

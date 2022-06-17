@@ -36,8 +36,6 @@ export const getCurrentProfileImage = createAsyncThunk(
 export const registerUser = createAsyncThunk(
   "user/registerUser",
   async (credentials) => {
-    console.log("credentials");
-    console.log(credentials);
     const response = await authService.register(credentials.username, 
       credentials.email, 
       credentials.password, 
@@ -105,7 +103,6 @@ export const userSlice = createSlice({
     },
     [getCurrentUser.fulfilled]: (state, action) => {
       state.currentUser = action.payload;
-      console.log(action.payload);
       state.admin = action.payload.userRoles.length > 0 ?  (action.payload.userRoles[0].role.name == "admin" ? true : false) : false;
     },
     [getUserList.fulfilled]: (state, action) => {
@@ -113,11 +110,9 @@ export const userSlice = createSlice({
     },
     [updateProfile.fulfilled]: (state, action) => {
       state.currentUser = action.payload;
-      localStorage.setItem("user", JSON.stringify(action.payload));
     },
     [updateAvatar.fulfilled]: (state, action) => {
       state.currentUser = action.payload;
-      localStorage.setItem("user", JSON.stringify(action.payload));
     },
   },
 });

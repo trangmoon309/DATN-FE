@@ -57,8 +57,6 @@ const TransactionList = props => {
     }}))
   },[])
 
-  console.log(userTransactions);
-
   useEffect(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
     const lastPageIndex = firstPageIndex + PageSize;

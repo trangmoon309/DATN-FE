@@ -43,7 +43,6 @@ export default function AddVehicleLineForm(props) {
     const handleSubmit = e => {
         if (recordForEdit != null && recordForEdit === true)
         {
-            console.log(values);
             dispatch(updateVehicleLine(values)).then((result) => {
             }).catch((error) => {
             });	

@@ -61,16 +61,8 @@ export default class UserTransactionService{
   }
 
   create = async (object) => {
-    var reqData = {
-        "userId": object.userId,
-        "receivedVehicleDate": object.receivedVehicleDate,
-        "returnedVehicleDate": object.returnedVehicleDate,
-        "totalCost": object.totalCost,
-        "cancelReason": object.cancelReason,
-        "reviewServiceQuality": object.reviewServiceQuality,
-        "costStatus": object.costStatus,
-        "rentalStatus": object.rentalStatus,
-    };
+    var reqData = object;
+    console.log(reqData);
     return await axios
       .request({
         url: `${UserTransactionEndpoint.UserTransaction}`,
@@ -91,18 +83,23 @@ export default class UserTransactionService{
 
   update = async (object) => {
     var reqData = {
-        "userId": object.userId,
-        "code": object.code,
-        "receivedVehicleDate": object.receivedVehicleDate,
-        "returnedVehicleDate": object.returnedVehicleDate,
-        "totalCost": object.totalCost,
-        "depositCosted": object.depositCosted,
-        "totalDays": object.totalDays,
-        "cancelReason": object.cancelReason,
-        "reviewServiceQuality": object.reviewServiceQuality,
-        "costStatus": object.costStatus,
-        "rentalStatus": object.rentalStatus,
-        "userTransactionVehicles": object.userTransactionVehicles,
+      "userId": object.id,
+      "paymenPayPalId": object.paymenPayPalId,
+      "payerIDPayPalId": object.payerIDPayPalId,
+      "code": object.code,
+      "receivedVehicleDate": object.receivedVehicleDate,
+      "returnedVehicleDate": object.returnedVehicleDate,
+      "depositDate": object.depositDate,
+      "cancelDate": object.cancelDate,
+      "payingDate": object.payingDate,
+      "totalCost": object.totalCost,
+      "depositCosted": object.depositCosted,
+      "totalDays": object.totalDays,
+      "cancelReason": object.cancelReason,
+      "reviewServiceQuality": object.reviewServiceQuality,
+      "costStatus": object.costStatus,
+      "rentalStatus": object.rentalStatus,
+      "userTransactionVehicles": object.userTransactionVehicles
     };
     return await axios
       .request({

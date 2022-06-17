@@ -35,6 +35,7 @@ function SignInPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const loggedIn = useSelector((state) => state.user.loggedIn);
+  const admin = useSelector((state) => state.user.admin);
   const [dynamicContainer, setDynamicContainer] = useState("container");
   const [registerRequest, setregisterRequest] = useState(requestRegister);
 
@@ -44,7 +45,6 @@ function SignInPage() {
         ...prevState,
         [name]: value
     }));
-    console.log(registerRequest);
 };
 
   useEffect(() => {
@@ -52,7 +52,8 @@ function SignInPage() {
       dispatch(getCurrentUser());
       toast.success("Successfully login! ") 
       setTimeout(() => {
-        history.push('/')
+        if(admin == true) history.push('/dashboard')
+        else history.push('/')
       }, 1000);
     }
   },[loggedIn]);

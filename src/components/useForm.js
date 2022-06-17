@@ -17,6 +17,20 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
         //     validate({ [name]: value })
     }
 
+    // User Cart
+    const handleCartInputChange = e => {
+        const { name, value } = e.target;
+        let currentAmount = values.oneDayAmounts;
+        if(name == "totalDays"){
+            currentAmount = currentAmount*value;
+        }
+        setValues({
+            ...values,
+            ["totalAmounts"]: currentAmount,
+            [name]: value,
+          })
+    }
+
     // User Transaction
     function convert(str) {
         var date = new Date(str),
@@ -174,6 +188,7 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
         handleVehicleTypeSelectChange,
         handleVehiclePropertiesSelectChange,
         handleReceiveDateChange,
+        handleCartInputChange,
         resetForm,
         resetFormProfile,
     }

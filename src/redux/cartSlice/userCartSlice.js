@@ -6,7 +6,8 @@ const service = new UserCartService();
 export const getUserCartList = createAsyncThunk(
   "userCart/getList",
   async (credentials) => {
-    const response = await service.getList(credentials.skipCount, '3a03c0bf-7649-7d45-9de9-661281763325');
+    const currentUser = JSON.parse(localStorage.getItem("user"));
+    const response = await service.getList(credentials.skipCount, currentUser.id);
     return response.data;
   }
 );
@@ -19,10 +20,17 @@ export const createUserCart = createAsyncThunk(
   }
 );
 
+export const createPayment = createAsyncThunk(
+  "userCart/createPayment",
+  async (total) => {
+    const response = await service.createPayment(total);
+    return response.data;
+  }
+);
+
 export const updateUserCart = createAsyncThunk(
   "userCart/update",
   async (credentials) => {
-    console.log(credentials);
     const response = await service.update(credentials.userId, credentials.objects);
     return response.data;
   }
@@ -54,7 +62,6 @@ export const userCartSlice = createSlice({
       state.totalItems = 0;
     },
     removeItem: (state,action) => {
-      console.log(action.payload);
       state.items = state.items.filter(x => action.payload.id !== x.id)
     },
     increaseItemAmount:(state,action) => {
@@ -69,7 +76,6 @@ export const userCartSlice = createSlice({
       }
     },
     decreaseItemAmount:(state,action) => {
-      console.log(action);
       var item = state.items.find(x => action.payload.id == x.id)
       if(item != null){
         item.quantity = item.quantity - 1;

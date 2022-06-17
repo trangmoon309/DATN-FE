@@ -17,6 +17,9 @@ function App() {
   return (
     <Switch>
       <Route exact path="/">
+        <VehicleList></VehicleList>
+      </Route>
+      <Route exact path="/dashboard">
         <Dashboard></Dashboard>
       </Route>
       <Route exact path="/signin">
@@ -44,6 +47,9 @@ function App() {
         <ProfilePage></ProfilePage>
       </Route>
       <Route exact path="/cart">
+        <Cart></Cart>
+      </Route>
+      <Route exact path="/cart/success">
         <Cart></Cart>
       </Route>
     </Switch>

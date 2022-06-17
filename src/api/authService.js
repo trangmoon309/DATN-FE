@@ -145,6 +145,7 @@ export default class AuthService{
       })
       .then((response) => {
         toast.success("Successfully updated! ") 
+        localStorage.setItem("user", JSON.stringify(response.data));
         return Promise.resolve(response);
       })
       .catch((err) =>{
@@ -155,8 +156,6 @@ export default class AuthService{
   updateAvatar = async (imageFile) => {
     var bodyFormData = new FormData();
     bodyFormData.append('file', imageFile); 
-    console.log(imageFile);
-
     return await axios
       .request({
         baseURL: `${API_URL}`,
@@ -171,6 +170,7 @@ export default class AuthService{
       })
       .then((response) => {
         toast.success("Successfully avatar updated! ") 
+        localStorage.setItem("user", JSON.stringify(response.data));
         return Promise.resolve(response);
       })
       .catch((err) =>{
@@ -188,7 +188,6 @@ export default class AuthService{
         withCredentials: true,
       })
       .then((response) => {
-        console.log(response);
         return Promise.resolve(response);
       })
       .catch((err) => Promise.reject(err));

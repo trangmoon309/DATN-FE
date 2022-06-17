@@ -62,8 +62,6 @@ export default class VehicleTypeService{
       "name": object.name,
       "vehicleTypeDetails": object.vehicleTypeDetails
     }
-    console.log(reqData);
-
     return await axios
       .request({
         url: `${VehicleTypeEndpoint.VehicleType}/${object.id}`,

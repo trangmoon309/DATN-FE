@@ -22,7 +22,6 @@ export default function TransactionDetailForm(props) {
     } = useForm(content, true, null);
 
     const handleSubmit = e => {
-        //console.log(values);
         dispatch(updateUserTransaction(values)).then((result) => {
             setOpenPopup(false);
             }).catch((error) => {

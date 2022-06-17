@@ -16,10 +16,18 @@ import {
 } from "../../redux/vehicleSlice/vehicleLineSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router";
+import { useLocation } from 'react-router-dom';
 
+function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
 
 let PageSize = 10;
 const VehicleLineList = props => {
+  let query = useQuery();
+  let name = query.get("name");
   const useStyles = makeStyles(theme => ({
     pageContent: {
         margin: theme.spacing(5),
@@ -38,7 +46,7 @@ const VehicleLineList = props => {
   const vehicleLines = useSelector(state => state.vehicleLine.items);
   const totalVehicleLines = useSelector(state => state.vehicleLine.totalVehicleLine);
 
-  const [keyWord, setKeyWord] = useState(null);
+  const [keyWord, setKeyWord] = useState(name != null ? name : null);
   const [currentPage, setCurrentPage] = useState(1);
   const [openPopup, setOpenPopup] = useState(false);
   const [editedItem, setEditedItem] = useState(null);
@@ -47,7 +55,7 @@ const VehicleLineList = props => {
   const options = []
 
   useEffect(() => {
-    dispatch(getVehicleLineList({keyWord:keyWord, skipCount:0}))
+    dispatch(getVehicleLineList({keyWord:keyWord, skipCount:0}));
   },[])
 
   useEffect(() => {
@@ -57,7 +65,18 @@ const VehicleLineList = props => {
   }, [currentPage]);
 
   useEffect(() => {
-    dispatch(getVehicleLineList({keyWord:keyWord, skipCount:0}))
+    if(keyWord != null && keyWord.length>0){
+      history.push({
+        pathname: '/vehicle-line',
+        search: '?name='+keyWord,
+      })
+    }else{
+      history.push({
+        pathname: '/vehicle-line',
+      })
+    }
+
+    dispatch(getVehicleLineList({keyWord:keyWord, skipCount:0}));
   },[keyWord])
 
   

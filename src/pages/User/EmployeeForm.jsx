@@ -45,7 +45,6 @@ export default function EmployeeForm() {
     const handleSubmit = e => {
         dispatch(updateProfile(values)).then((result) => {
             if(file !== ''){
-                //console.log("da update");
                 dispatch(updateAvatar(file));
             }
         }).catch((error) => {
@@ -58,7 +57,6 @@ export default function EmployeeForm() {
     const userAvatarId = innitializeValue.extraInfors.avatarId;
 
     const defaultAvatarUrl = ((userAvatarId !== '') || (userAvatarId !== ' ')) ? (virtualDirectory + userAvatarId  + '.jpg') : (virtualDirectory + defaultImg);
-    console.log(defaultAvatarUrl);
     const [file, setFile] = useState('');
     const [imagePreviewUrl, setImagePreviewUrl] = useState(defaultAvatarUrl);
 
@@ -66,8 +64,6 @@ export default function EmployeeForm() {
         e.preventDefault();
         let reader = new FileReader();
         let filex = e.target.files[0];
-        console.log(filex);
-        //console.log('handle uploading----', filex);
         reader.onloadend = () => {
           setFile(filex);
           setImagePreviewUrl(reader.result);

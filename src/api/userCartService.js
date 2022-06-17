@@ -53,6 +53,24 @@ export default class UserCartService{
       });
   };
 
+  createPayment = async (total) => {
+    return await axios
+      .request({
+        url: `${UserCartEndpoint.CreatePayment}?total=${total}`,
+        method: "post",
+        baseURL: `${API_URL}`,
+        withCredentials: true
+      })
+      .then((response) => {
+        toast.success("Successfully created! ") 
+        return Promise.resolve(response);
+      })
+      .catch((err) =>{
+        toast.error(err.response.data.validationErrors[0].message);
+        return Promise.reject(err);
+      });
+  };
+
   update = async (userId, object) => {
     var reqData = [];
     object.forEach(item => reqData.push({

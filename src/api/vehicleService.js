@@ -77,7 +77,6 @@ export default class VehicleService{
     imageFiles.forEach(file=>{
       bodyFormData.append("images", file);
     });
-    console.log(bodyFormData);
 
     return await axios
       .request({

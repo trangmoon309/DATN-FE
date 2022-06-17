@@ -33,15 +33,17 @@ export default function Dashboard() {
     if(localStorage.getItem("user") != null && loggedIn == false){
       dispatch(setLoggedInTrue());
       const currentUser = JSON.parse(localStorage.getItem("user"));
-      dispatch(setCurrentUser({
-        user: currentUser,
-      }));
-      if(currentUser.userRoles.length > 0 && currentUser.userRoles[0].role.name == "admin"){
-        dispatch(setAdminTrue());
-      }
-      else{
-        dispatch(setAdminFalse());
-        history.push('/vehicle');  
+      if(currentUser != null) {
+        dispatch(setCurrentUser({
+          user: currentUser,
+        }));
+        if(currentUser.userRoles.length > 0 && currentUser.userRoles[0].role.name == "admin"){
+          dispatch(setAdminTrue());
+        }
+        else{
+          dispatch(setAdminFalse());
+          history.push('/vehicle');  
+        }
       }
     };
     if(admin == true){

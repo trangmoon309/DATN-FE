@@ -67,7 +67,11 @@ export const UserTransactionEndpoint = {
 // User Cart
 const UserCart = 'user-carts';
 const GetByUser = 'by-user';
+const CreatePayment = 'paypals/payment/create';
+const SuccessPayment = 'paypals/payment/success';
 export const UserCartEndpoint = {
     UserCart,
-    GetByUser
+    GetByUser,
+    CreatePayment,
+    SuccessPayment
 }
