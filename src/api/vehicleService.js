@@ -41,6 +41,38 @@ export default class VehicleService{
       .catch((err) => Promise.reject(err));
   }
 
+  getList2 = async(keyWord, skipCount, vehicleTypeId, vehicleLineId) => {
+    var parameters = {
+      "skipCount": skipCount,
+      "maxResultCount": 1000
+    };
+
+    if(keyWord !== null) {
+      parameters["keyWord"] = keyWord;
+    }
+
+    if(vehicleTypeId !== null) {
+      parameters["vehicleTypeId"] = vehicleTypeId;
+    }
+
+    if(vehicleLineId !== null) {
+      parameters["vehicleLineId"] = vehicleLineId;
+    }
+    
+    return await axios
+      .request({
+        url: `${VehicleEndpoint.Vehicle}/${VehicleEndpoint.GetListByCondition}`,
+        method: "get",
+        baseURL: `${API_URL}`,
+        withCredentials: true,
+        params:parameters
+      })
+      .then((response) => {
+        return Promise.resolve(response);
+      })
+      .catch((err) => Promise.reject(err));
+  }
+
   create = async (object) => {
     var reqData = {
       "vehicleTypeId": object.vehicleTypeId,

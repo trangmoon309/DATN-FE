@@ -4,7 +4,10 @@ import * as FaIcons from 'react-icons/fa';
 const Items = props => {
   const { content, removeItem, increment, decrement } = props;
   const directoryPath = "http://localhost:3333/vehicle-images/";
-  var imgURL = content.vehicle.vehicleImages.length > 0 ? directoryPath + content.vehicle.vehicleImages[0].fileInformationId + ".jpg" : "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
+  var imgURL = "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/No-Image-Placeholder.svg/1665px-No-Image-Placeholder.svg.png";
+  if(content.vehicle.vehicleImages != null && content.vehicle.vehicleImages.length > 0){
+    imgURL = directoryPath + content.vehicle.vehicleImages[0].fileInformationId + ".jpg";
+  } 
   return (
     <>
       <div className="items-info">

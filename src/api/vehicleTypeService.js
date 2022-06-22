@@ -33,6 +33,30 @@ export default class VehicleTypeService{
       .catch((err) => Promise.reject(err));
   }
 
+  getList2 = async(keyWord, skipCount) => {
+    var parameters = {
+      "skipCount": skipCount,
+      "maxResultCount": 1000
+    };
+
+    if(keyWord !== null) {
+      parameters["keyWord"] = keyWord;
+    }
+    
+    return await axios
+      .request({
+        url: `${VehicleTypeEndpoint.VehicleType}`,
+        method: "get",
+        baseURL: `${API_URL}`,
+        withCredentials: true,
+        params:parameters
+      })
+      .then((response) => {
+        return Promise.resolve(response);
+      })
+      .catch((err) => Promise.reject(err));
+  }
+
   create = async (object) => {
     var reqData = {
       "name": object.name,

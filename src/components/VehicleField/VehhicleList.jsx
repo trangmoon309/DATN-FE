@@ -15,9 +15,11 @@ import {
 } from "../../redux/vehicleSlice/vehicleSlice";
 import {
   getVehicleLineList,
+  getVehicleLineList2
 } from "../../redux/vehicleSlice/vehicleLineSlice";
 import {
   getVehicleTypeList,
+  getVehicleTypeList2
 } from "../../redux/vehicleSlice/vehicleTypeSlice";
 import Pagination from '../../pages/Pagination/Pagination';
 
@@ -29,13 +31,14 @@ function VehicleList() {
   const [editedItem, setEditedItem] = useState(null);
   const [isEdited, setIsEdited] = useState(false);
   const vehicles = useSelector(state => state.vehicle.items);
-  const vehicleLines = useSelector(state => state.vehicleLine.items);
-  const vehicleTypes = useSelector(state => state.vehicleType.items);
+  const vehicleLines = useSelector(state => state.vehicleLine.allItems);
+  const vehicleTypes = useSelector(state => state.vehicleType.allItems);
   const [currentPage, setCurrentPage] = useState(1);
   const totalVehicles = useSelector(state => state.vehicle.totalVehicle);
   const [filterVehicleLine, setFilterVehicleLine] = useState(null);
   const [filterVehicleType, setFilterVehicleType] = useState(null);
 
+  console.log(vehicleLines)
   let vehicleLineOptions = [{"setSelected":setFilterVehicleLine}];
   vehicleLines.forEach(item => {
     vehicleLineOptions.push({
@@ -76,10 +79,10 @@ function VehicleList() {
   useEffect(() => {
     dispatch(getVehicleList({keyWord:keyWord, skipCount:0}));
     if(vehicleLines.length == 0){
-      dispatch(getVehicleLineList({keyWord:keyWord, skipCount:0}))
+      dispatch(getVehicleLineList2({keyWord:keyWord, skipCount:0}))
     }
     if(vehicleTypes.length == 0){
-      dispatch(getVehicleTypeList({keyWord:keyWord, skipCount:0}))
+      dispatch(getVehicleTypeList2({keyWord:keyWord, skipCount:0}))
     }
   },[])
 

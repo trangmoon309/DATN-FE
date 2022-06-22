@@ -98,12 +98,17 @@ const Cart = () => {
 
   const submitCheckOut = (total,receivedDate,totalDays) => {
     setOpenPopup(false);
-    localStorage.setItem("receivedDate", JSON.stringify({data: receivedDate}));
-    localStorage.setItem("totalDays", JSON.stringify({data: totalDays}));
-    localStorage.setItem("cart", JSON.stringify(userCarts));
-    return dispatch(createPayment(total)).then((res) => {
-      window.open(res.payload.headers[0].value);
-    });
+    dispatch(updateUserCart({
+      userId: currentUser.id,
+      objects: userCarts,
+    })).then((res) => {
+      localStorage.setItem("receivedDate", JSON.stringify({data: receivedDate}));
+      localStorage.setItem("totalDays", JSON.stringify({data: totalDays}));
+      localStorage.setItem("cart", JSON.stringify(userCarts));
+      return dispatch(createPayment(total)).then((res) => {
+        window.open(res.payload.headers[0].value);
+      });
+    })
   };
 
   return (

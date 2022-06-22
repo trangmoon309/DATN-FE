@@ -76,7 +76,7 @@ export default function CheckOutForm(props) {
                     type="button"
                     onClick={() => submitHandler(values.totalAmounts, values.receivedDate, values.totalDays)} 
                     startIcon={<AddCircleIcon />}
-                    //text="Submit"
+                    text="Submit"
                  />
             </div>
         </Form>

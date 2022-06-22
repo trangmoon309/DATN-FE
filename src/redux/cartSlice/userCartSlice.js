@@ -14,8 +14,8 @@ export const getUserCartList = createAsyncThunk(
 
 export const createUserCart = createAsyncThunk(
   "userCart/create",
-  async (name) => {
-    const response = await service.create(name);
+  async (obj) => {
+    const response = await service.create(obj);
     return response.data;
   }
 );

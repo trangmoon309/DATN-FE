@@ -15,6 +15,10 @@ import {
   deleteVehicle
 } from "../../../redux/vehicleSlice/vehicleSlice";
 
+import {
+  createUserCart
+} from "../../../redux/cartSlice/userCartSlice";
+
 const VehicleDetail = props => {
 
   const currentVehicle = useSelector((state) => state.vehicle.currentVehicle);
@@ -22,6 +26,7 @@ const VehicleDetail = props => {
   const dispatch = useDispatch();
   const directoryPath = "http://localhost:3333/vehicle-images/";
   const [openPopup, setOpenPopup] = useState(false)
+  const currentUser = JSON.parse(localStorage.getItem("user"));
 
   async function fileUpload(file) {
     const url = `https://springrestapi-carrental.herokuapp.com/api/images/add?id=${currentVehicle.id}`;
@@ -40,6 +45,15 @@ const VehicleDetail = props => {
   {
     dispatch(deleteVehicle(id));
     history.push('/vehicle')
+  }
+
+  function handleAddToCart(id)
+  {
+    dispatch(createUserCart({
+      userId: currentUser.id,
+      vehicleId: id,
+      quantity: 1
+  }));
   }
 
   return (
@@ -93,7 +107,8 @@ const VehicleDetail = props => {
 
               {/* <p>{currentVehicle.description}</p> */}
               {/* <p>{products[0].colors}</p> */}
-              <button className="cart">Add to cart</button> 
+              {(currentUser != null) ? <button className="cart" onClick={() => handleAddToCart(currentVehicle.id)} >Add to cart</button> : <></>}
+              
               <div>
                 <button className="cart" style={{"margin-right": "10px", "background-color":"#38A793"}} onClick={() => setOpenPopup(true)}><FaIcons.FaEdit /></button> 
                 <button className="cart" style={{"background-color":"#EC7575"}} onClick={() => handleDelete(currentVehicle.id)}><FaIcons.FaTrash /></button>
