@@ -1,4 +1,4 @@
-# Vehicle Rental Service api management
+# Vehicle Rental Service UI
 
 This repository contains working code which defines all the FE code which used for "Vehicle Rental Service" project.
 
