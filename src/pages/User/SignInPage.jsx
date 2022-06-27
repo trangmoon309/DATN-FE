@@ -4,9 +4,7 @@ import { useHistory } from "react-router";
 import {
   logUserIn,
   registerUser,
-  getCurrentUser,
-  setLoggedInTrue,
-  setAdminTrue
+  getCurrentUser
 } from "../../redux/userSlice/userSlice";
 import "../../signin.css";
 import { toast } from "react-toastify";
@@ -34,10 +32,9 @@ function SignInPage() {
   const history = useHistory()
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const loggedIn = useSelector((state) => state.user.loggedIn);
-  const admin = useSelector((state) => state.user.admin);
-  const [dynamicContainer, setDynamicContainer] = useState("container");
+  const [dynamicContainer, setDynamicContainer] = useState((window.location.pathname) == '/signin' ? "container" : "container right-panel-active");
   const [registerRequest, setregisterRequest] = useState(requestRegister);
+  const isAdmin = useSelector((state) => state.user.admin);
 
   const handleChange = e => {
     const { name, value } = e.target;
@@ -45,25 +42,32 @@ function SignInPage() {
         ...prevState,
         [name]: value
     }));
-};
-
-  useEffect(() => {
-    if(loggedIn){
-      dispatch(getCurrentUser());
-      toast.success("Successfully login! ") 
-      setTimeout(() => {
-        if(admin == true) history.push('/dashboard')
-        else history.push('/')
-      }, 1000);
-    }
-  },[loggedIn]);
+  };
 
   function submitLoginHandler() {
-    dispatch(logUserIn({email:email, password:password}));
+    dispatch(logUserIn({email:email, password:password})).then((res) => {
+      dispatch(getCurrentUser()).then((res) => {
+        toast.success("Successfully login!");
+        if(isAdmin == true){
+          setTimeout(() => {
+            history.push('/dashboard')
+          }, 1000);
+        }
+        else{
+          setTimeout(() => {
+            history.push('/vehicle')
+          }, 1000);
+        }
+      })
+    });
   }
 
   function submitRegisterHandler() {
-    dispatch(registerUser({email:email, password:password}));
+    dispatch(registerUser(registerRequest)).then((res) => {
+      setTimeout(() => {
+        setDynamicContainer(dynamicContainer.replace(" right-panel-active", ""))
+      }, 1000); 
+    });
   }
 
   return (

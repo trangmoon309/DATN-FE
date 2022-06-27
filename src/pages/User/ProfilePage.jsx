@@ -1,5 +1,4 @@
 import React from "react";
-import { useParams } from "react-router";
 import { FooterContainer } from "../../components/Footer/FooterContainer";
 import NavigationBar from "../../components/NavigationBar/NavigationBar";
 import EmployeeForm from './EmployeeForm';

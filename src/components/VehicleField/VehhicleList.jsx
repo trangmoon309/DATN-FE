@@ -38,7 +38,6 @@ function VehicleList() {
   const [filterVehicleLine, setFilterVehicleLine] = useState(null);
   const [filterVehicleType, setFilterVehicleType] = useState(null);
 
-  console.log(vehicleLines)
   let vehicleLineOptions = [{"setSelected":setFilterVehicleLine}];
   vehicleLines.forEach(item => {
     vehicleLineOptions.push({

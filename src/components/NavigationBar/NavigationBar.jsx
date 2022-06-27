@@ -9,9 +9,6 @@ import Logo from './Logo';
 import {
   setLoggedInFalse,
   logCustomerOut,
-  setLoggedInTrue,
-  setAdminTrue,
-  setAdminFalse,
   setCurrentUser
 } from "../../redux/userSlice/userSlice";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,7 +20,10 @@ function NavigationBar() {
   const showSidebar = () => setSidebar(!sidebar);
   const dispatch = useDispatch();
   const history = useHistory();
-  const admin = useSelector(state => state.user.admin);
+
+  const isAdmin = useSelector(state => state.user.admin);
+  const currentUser = useSelector(state => state.user.currentUser);
+  const currentUserStorage = localStorage.getItem("user");
 
   function handleLog() {
     if(isLoggedIn){
@@ -34,22 +34,11 @@ function NavigationBar() {
   }
 
   useEffect(() => {
-    if(localStorage.getItem("user") != null && isLoggedIn == false){
-      dispatch(setLoggedInTrue());
-      const currentUser = JSON.parse(localStorage.getItem("user"));
-      if(currentUser != null){
-        dispatch(setCurrentUser({
-          user: currentUser,
-        }));
-        if(currentUser.userRoles.length > 0 && currentUser.userRoles[0].role.name == "admin"){
-          dispatch(setAdminTrue());
-        }
-      }
-      else{
-        dispatch(setAdminFalse());
-        history.push('/vehicle');  
-      }
-    };
+    if(currentUser == null && currentUserStorage != null){
+      dispatch(setCurrentUser({
+        user: JSON.parse(currentUserStorage),
+      }));
+    }
   },[])
 
   return (
@@ -87,7 +76,7 @@ function NavigationBar() {
             </li>
             {SidebarData.map((item, index) => {
               return (
-                admin == false && item.isForClient == false ? (
+                isAdmin == false && item.isForClient == false ? (
                   <></>
                 ) : (                  
                 <li key={index} className={item.cName}>

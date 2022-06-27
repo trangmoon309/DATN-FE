@@ -62,7 +62,6 @@ export default class UserTransactionService{
 
   create = async (object) => {
     var reqData = object;
-    console.log(reqData);
     return await axios
       .request({
         url: `${UserTransactionEndpoint.UserTransaction}`,

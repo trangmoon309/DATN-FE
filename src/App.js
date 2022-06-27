@@ -25,6 +25,9 @@ function App() {
       <Route exact path="/signin">
         <SignInPage></SignInPage>
       </Route>
+      <Route exact path="/signup">
+        <SignInPage></SignInPage>
+      </Route>
       <Route exact path="/vehicle-type">
         <VehicleTypeList></VehicleTypeList>
       </Route>

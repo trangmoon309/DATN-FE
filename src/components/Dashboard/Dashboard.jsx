@@ -5,13 +5,10 @@ import WidgetLg from './WidgetLg';
 import WidgetSm from './WidgetSm';
 import LineChart from "./LineChart";
 import { FooterContainer } from './../Footer/FooterContainer';
-import React, { useState,useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import {
   getUserList,
-  setLoggedInTrue,
-  setAdminTrue,
-  setAdminFalse,
   setCurrentUser
 } from "../../redux/userSlice/userSlice";
 import {
@@ -25,36 +22,31 @@ export default function Dashboard() {
   const users = useSelector(state => state.user.allUsers);
   const userTransactions = useSelector(state => state.userTransaction.items);
   const summary = useSelector(state => state.userTransaction.summary);
-  const admin = useSelector(state => state.user.admin);
-  const loggedIn = useSelector(state => state.user.loggedIn);
   const history = useHistory()
 
+  const isAdmin = useSelector(state => state.user.admin);
+  const currentUser = useSelector(state => state.user.currentUser);
+  const currentUserStorage = localStorage.getItem("user");
+
   useEffect(() => {
-    if(localStorage.getItem("user") != null && loggedIn == false){
-      dispatch(setLoggedInTrue());
-      const currentUser = JSON.parse(localStorage.getItem("user"));
-      if(currentUser != null) {
-        dispatch(setCurrentUser({
-          user: currentUser,
-        }));
-        if(currentUser.userRoles.length > 0 && currentUser.userRoles[0].role.name == "admin"){
-          dispatch(setAdminTrue());
+    if(currentUser == null &&  currentUserStorage!= null){
+      dispatch(setCurrentUser({
+        user: JSON.parse(currentUserStorage),
+      })).then((res) => {
+        if(isAdmin == true){
+          dispatch(getUserList());
+          dispatch(getUserTransactionList({skipCount:0,searchRequest:{
+            userId:null,
+            keyWord:null,
+            costStatus:null,
+            rentalStatus:null
+          }}));
+          dispatch(getSummary());
         }
         else{
-          dispatch(setAdminFalse());
           history.push('/vehicle');  
         }
-      }
-    };
-    if(admin == true){
-      dispatch(getUserList());
-      dispatch(getUserTransactionList({skipCount:0,searchRequest:{
-        userId:null,
-        keyWord:null,
-        costStatus:null,
-        rentalStatus:null
-      }}));
-      dispatch(getSummary());
+      });
     }
   },[])
 

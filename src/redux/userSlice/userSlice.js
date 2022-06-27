@@ -78,6 +78,17 @@ export const userSlice = createSlice({
   reducers: {
     setCurrentUser: (state, action) => {
       state.currentUser = action.payload.user;
+      state.admin = false;
+      state.loggedIn = true;
+      var res = state.currentUser;
+      if(res.userRoles != null && res.userRoles.length > 0){
+        res.userRoles.forEach(x => {
+          if(x.role != null && x.role.name == 'admin'){
+            state.admin = true;
+            return;
+          }
+        })
+      }
     },
     setLoggedInTrue: (state) => {
       state.loggedIn = true;
@@ -89,21 +100,30 @@ export const userSlice = createSlice({
       state.currentUser = null;
       localStorage.removeItem("_token");
       localStorage.removeItem("user");
-    },
-    setAdminTrue: (state) => {
-      state.admin = true
-    },
-    setAdminFalse: (state) => {
-      state.admin = false
+    }, 
+    setAdminFlag: (state, action) => {
+      state.admin = action.payload.isAdmin
     }
   },
   extraReducers: {
     [logUserIn.fulfilled]: (state, action) => {
-      state.loggedIn = action.payload != null;
+      state.loggedIn = true;
     },
     [getCurrentUser.fulfilled]: (state, action) => {
       state.currentUser = action.payload;
-      state.admin = action.payload.userRoles.length > 0 ?  (action.payload.userRoles[0].role.name == "admin" ? true : false) : false;
+      state.admin = false;
+      state.loggedIn = true;
+      localStorage.setItem("user", JSON.stringify(state.currentUser));
+
+      var res = action.payload;
+      if(res.userRoles != null && res.userRoles.length > 0){
+        res.userRoles.forEach(x => {
+          if(x.role != null && x.role.name == 'admin'){
+            state.admin = true;
+            return;
+          }
+        })
+      }
     },
     [getUserList.fulfilled]: (state, action) => {
       state.allUsers = action.payload.items;
@@ -114,9 +134,24 @@ export const userSlice = createSlice({
     [updateAvatar.fulfilled]: (state, action) => {
       state.currentUser = action.payload;
     },
+    [registerUser.fulfilled]: (state, action) => {
+      state.currentUser = action.payload;
+      state.admin = false;
+      state.loggedIn = true;
+      localStorage.setItem("user", JSON.stringify(state.currentUser));
+      var res = action.payload;
+      if(res.userRoles != null && res.userRoles.length > 0){
+        res.userRoles.forEach(x => {
+          if(x.role != null && x.role.name == 'admin'){
+            state.admin = true;
+            return;
+          }
+        })
+      }
+    },
   },
 });
 
-export const {setCurrentUser, setLoggedInTrue, logCustomerOut, setAdminTrue, setLoggedInFalse, setAdminFalse} =
+export const {setCurrentUser, setLoggedInTrue, logCustomerOut, setLoggedInFalse, setAdminFlag} =
 userSlice.actions;
 export default userSlice.reducer;

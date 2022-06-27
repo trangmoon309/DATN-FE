@@ -76,7 +76,6 @@ export default class AuthService{
       })
       .then((response) => {
         if (_.get(response, "data.errors")) return Promise.reject(response.data.errors);
-        localStorage.setItem("user", JSON.stringify(response.data));
         // Trả response thôi để bắt được fulfilled
         return Promise.resolve(response);
       })
@@ -195,6 +194,7 @@ export default class AuthService{
 
   logout = () => {
     localStorage.removeItem("user");
+    localStorage.removeItem("_token");
   };
 }
 
