@@ -15,6 +15,7 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
           });
         // if (validateOnChange)
         //     validate({ [name]: value })
+        console.log(values)
     }
 
     // User Cart
@@ -37,6 +38,45 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
           mnth = ("0" + (date.getMonth() + 1)).slice(-2),
           day = ("0" + date.getDate()).slice(-2);
         return [date.getFullYear(), mnth, day].join("-");
+    }
+
+    const handleRideQualityReviewChange = e => {
+        const { name, value } = e.target;
+        const list = [...values.userTransactionVehicles];
+        const targetIndex = name; 
+        let object = {...list[targetIndex]};
+        object.reviewRideQuality=value;
+        list[targetIndex] = object;
+        setValues({
+            ...values,
+            userTransactionVehicles: list,
+        });
+    }
+
+    const handleEngineQualityReviewChange = e => {
+        const { name, value } = e.target;
+        const list = [...values.userTransactionVehicles];
+        const targetIndex = name; 
+        let object = {...list[targetIndex]};
+        object.reviewEngineQuality=value;
+        list[targetIndex] = object;
+        setValues({
+            ...values,
+            userTransactionVehicles: list,
+        });
+    }
+
+    const handleNoteReviewChange = e => {
+        const { name, value } = e.target;
+        const list = [...values.userTransactionVehicles];
+        const targetIndex = name; 
+        let object = {...list[targetIndex]};
+        object.reviewNote=value;
+        list[targetIndex] = object;
+        setValues({
+            ...values,
+            userTransactionVehicles: list,
+        });
     }
 
     const handleReceiveDateChange = e => {
@@ -189,6 +229,10 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
         handleVehiclePropertiesSelectChange,
         handleReceiveDateChange,
         handleCartInputChange,
+        // Transaction Review
+        handleRideQualityReviewChange,
+        handleEngineQualityReviewChange,
+        handleNoteReviewChange,
         resetForm,
         resetFormProfile,
     }

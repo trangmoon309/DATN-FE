@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
 import { Route } from "react-router";
 import "./App.css";
 import SignInPage from "./pages/User/SignInPage";
@@ -23,9 +21,6 @@ function App() {
         <Dashboard></Dashboard>
       </Route>
       <Route exact path="/signin">
-        <SignInPage></SignInPage>
-      </Route>
-      <Route exact path="/signup">
         <SignInPage></SignInPage>
       </Route>
       <Route exact path="/vehicle-type">

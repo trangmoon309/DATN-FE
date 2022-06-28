@@ -10,6 +10,7 @@ const Items = props => {
   } 
   return (
     <>
+      {(content.isRanOut == true) ? <span style={{"margin-right": "2em", "font-weight":"bold", "color": "red", "font-size":"17px"}}>RENT OUT</span> : <></>}
       <div className="items-info">
         <div className="product-img">
           <img src={imgURL} alt="tp" />

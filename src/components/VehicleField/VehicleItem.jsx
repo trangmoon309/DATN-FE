@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import {setCurrentVehicle} from "../../redux/vehicleSlice/vehicleSlice"
-import * as FaIcons from 'react-icons/fa';
 
 function VehicleItem({ vehicle, vehicleImages }) {
   const directoryPath = "http://localhost:3333/vehicle-images/";
@@ -20,12 +19,12 @@ function VehicleItem({ vehicle, vehicleImages }) {
         className="carImage"
         style={{
           width: "100%",
-          height: "100%",
+          height: "80%",
           borderRadius: 8,
-          marginTop: "15px",
-          marginBottom: "15px",
+          marginTop: "8px",
+          marginBottom: "5px",
         }}
-        src={vehicleImages[0]?directoryPath + vehicleImages[0].fileInformationId + ".jpg":"https://nepalcarsrental.com/assets/images/NoCar.jpg"}
+        src={vehicleImages[0]?directoryPath + vehicleImages[0].fileInformationId + ".jpg":"https://lasd.lv/public/assets/no-image.png"}
         onClick={selectCarHandler}
       ></img>
 
@@ -41,6 +40,7 @@ function VehicleItem({ vehicle, vehicleImages }) {
       >
         <h3 style={{ padding: "5px", fontSize: 18 }}>${vehicle.rentalPrice}/day</h3>
       </div>
+      <p style={{ "margin-bottom": "100px", fontSize: 20, "text-align":"center", "font-weight":"bold" }}>${vehicle.name}</p>
     </div>
   );
 }

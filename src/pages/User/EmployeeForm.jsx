@@ -5,16 +5,15 @@ import { useForm, Form } from '../../components/useForm';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import AvatarForm from './AvatarForm';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
     updateProfile,
     updateAvatar
 } from "../../redux/userSlice/userSlice";
 
-export default function EmployeeForm() {
-    //const currentUser = useSelector((state) => state.user.currentUser);
-    const dispatch = useDispatch();
+export default function EmployeeForm(props) {
     const currentUser = JSON.parse(localStorage.getItem("user"));
+    const dispatch = useDispatch();
     var innitializeValue = currentUser;
     const genderItems = [{ id: 'Male', title: 'Male', value: 'Male' },
         { id: 'Female', title: 'Female', value: 'Female' },

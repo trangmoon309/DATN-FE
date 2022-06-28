@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
+import { useLocation } from 'react-router-dom';
 import Pagination from '../Pagination/Pagination';
 import NavigationBar from './../../components/NavigationBar/NavigationBar';
 import FilterBar from './../../components/Filter/FilterBar';
@@ -14,18 +17,24 @@ import {
   getVehicleTypeList,
   setDeletedItem
 } from "../../redux/vehicleSlice/vehicleTypeSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { useHistory } from "react-router";
 
 let PageSize = 10;
+
+function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
 
 const VehicleTypeList = props => {
   const history = useHistory();
   const dispatch = useDispatch();
+  let query = useQuery();
+  let name = query.get("name");
   const vehicleTypes = useSelector(state => state.vehicleType.items);
   const totalVehicleTypes = useSelector(state => state.vehicleType.totalVehicleTypes);
 
-  const [keyWord, setKeyWord] = useState(null);
+  const [keyWord, setKeyWord] = useState(name != null ? name : null);
   const [currentPage, setCurrentPage] = useState(1);
   const [openPopup, setOpenPopup] = useState(false);
   const [editedItem, setEditedItem] = useState(null);
@@ -74,6 +83,17 @@ const VehicleTypeList = props => {
   }
 
   useEffect(() => {
+    if(keyWord != null && keyWord.length>0){
+      history.push({
+        pathname: '/vehicle-type',
+        search: '?name='+keyWord,
+      })
+    }else{
+      history.push({
+        pathname: '/vehicle-type',
+      })
+    }
+
     dispatch(getVehicleTypeList({keyWord:keyWord, skipCount:0}))
   },[keyWord])
 

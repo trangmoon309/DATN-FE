@@ -85,7 +85,7 @@ export default class UserTransactionService{
 
   update = async (object) => {
     var reqData = {
-      "userId": object.id,
+      "userId": object.userId,
       "paymenPayPalId": object.paymenPayPalId,
       "payerIDPayPalId": object.payerIDPayPalId,
       "code": object.code,

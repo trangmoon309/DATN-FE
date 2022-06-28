@@ -21,6 +21,7 @@ import ContextCart from './ContextCart';
 import { useLocation } from 'react-router-dom';
 import Popup from '../../components/Popup';
 import CheckOutForm from './CheckOutForm';
+import { toast } from "react-toastify";
 
 function useQuery() {
   const { search } = useLocation();
@@ -90,25 +91,32 @@ const Cart = () => {
 
   const submitChangeHandler = () => {
     const currentUser = JSON.parse(localStorage.getItem("user"));
-    return dispatch(updateUserCart({
-      userId: currentUser.id,
-      objects: userCarts,
-    }));
+      return dispatch(updateUserCart({
+        userId: currentUser.id,
+        objects: userCarts,
+      }));
   };
 
   const submitCheckOut = (total,receivedDate,totalDays) => {
+    const result = userCarts.filter(x => x.isRanOut == true);
+    console.log(result.length);
     setOpenPopup(false);
-    dispatch(updateUserCart({
-      userId: currentUser.id,
-      objects: userCarts,
-    })).then((res) => {
-      localStorage.setItem("receivedDate", JSON.stringify({data: receivedDate}));
-      localStorage.setItem("totalDays", JSON.stringify({data: totalDays}));
-      localStorage.setItem("cart", JSON.stringify(userCarts));
-      return dispatch(createPayment(total)).then((res) => {
-        window.open(res.payload.headers[0].value);
-      });
-    })
+    if(result.length > 0){
+      toast.error("Check out fail: Remove RENT-OUT item from your cart before check out!");
+    }
+    else{
+      dispatch(updateUserCart({
+        userId: currentUser.id,
+        objects: userCarts,
+      })).then((res) => {
+        localStorage.setItem("receivedDate", JSON.stringify({data: receivedDate}));
+        localStorage.setItem("totalDays", JSON.stringify({data: totalDays}));
+        localStorage.setItem("cart", JSON.stringify(userCarts));
+        return dispatch(createPayment(total)).then((res) => {
+          window.open(res.payload.headers[0].value);
+        });
+      })
+    }
   };
 
   return (
@@ -128,15 +136,19 @@ const Cart = () => {
         </Popup>
         <ContextCart
           items={userCarts}
-          totalAmounts={totalAmounts}
           totalItems={totalItems}
-          clearCart={clearCart}
           removeItem={remove}
           increment={increment}
           decrement={decrement}
-          submitChangeHandler={submitChangeHandler}
-          submitCheckOutHandler={setOpenPopup}
         />
+        <div className="card-total">
+          <h3>
+           Total Cost: <span> {totalAmounts}₹ </span>
+          </h3>
+          <button onClick={submitChangeHandler}>Save Change</button>
+          <button onClick={clearCart} style={{"margin-left":"20px", "background-color":"#861717"}}>Clear Cart</button>
+          <button onClick={() => setOpenPopup(true)} style={{"margin-left":"20px", "background-color":"#FF3A06"}}>Checkout</button>
+        </div>
       </div>
       <FooterContainer></FooterContainer>
     </div>

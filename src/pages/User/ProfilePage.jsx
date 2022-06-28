@@ -1,16 +1,16 @@
-import React from "react";
-import { FooterContainer } from "../../components/Footer/FooterContainer";
-import NavigationBar from "../../components/NavigationBar/NavigationBar";
+import { React } from "react";
+import { FooterContainer } from "./../../components/Footer/FooterContainer";
+import NavigationBar from './../../components/NavigationBar/NavigationBar';
 import EmployeeForm from './EmployeeForm';
 
-function ProfilePage() {
+const ProfilePage = props => {
   return (
     <div>
       <div style={{"z-index": "2em" }}>
         <NavigationBar></NavigationBar>
       </div>
       <div className="app">
-        <EmployeeForm></EmployeeForm>
+      	<EmployeeForm></EmployeeForm>
       </div>
       <FooterContainer></FooterContainer>
     </div>

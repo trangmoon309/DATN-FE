@@ -130,6 +130,19 @@ export const userSlice = createSlice({
     },
     [updateProfile.fulfilled]: (state, action) => {
       state.currentUser = action.payload;
+      state.admin = false;
+      state.loggedIn = true;
+      localStorage.setItem("user", JSON.stringify(state.currentUser));
+
+      var res = action.payload;
+      if(res.userRoles != null && res.userRoles.length > 0){
+        res.userRoles.forEach(x => {
+          if(x.role != null && x.role.name == 'admin'){
+            state.admin = true;
+            return;
+          }
+        })
+      }
     },
     [updateAvatar.fulfilled]: (state, action) => {
       state.currentUser = action.payload;

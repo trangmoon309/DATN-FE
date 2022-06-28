@@ -89,13 +89,6 @@ export default function TransactionDetailForm(props) {
                         label="Total Days"
                         value={values.totalDays}
                         disable
-                    /> 
-                    <Controls.Select
-                        name="reviewServiceQuality"
-                        label="Review Service Quality"
-                        value={values.reviewServiceQuality}
-                        onChange={handleInputChange}
-                        options={reviewServiceQualityOptions}
                     />
                 </Grid>
                 <Grid item xs={6}>
@@ -125,8 +118,6 @@ export default function TransactionDetailForm(props) {
                         value={values.cancelReason}
                         onChange={handleInputChange}
                     />
-                    <p>Review Service Quality</p>
-                    <span className={"rating_"+ values.reviewServiceQuality +"stars"}/>
                 </Grid>
             </Grid>
             <div style={{"margin":"20px"}}>

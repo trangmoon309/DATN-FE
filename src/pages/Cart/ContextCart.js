@@ -4,7 +4,7 @@ import { Scrollbars } from "react-custom-scrollbars-2";
 
 const ContextCart = props => {
   // cosumer
-  const { items, totalAmounts, totalItems, clearCart, removeItem, increment, decrement, submitChangeHandler,submitCheckOutHandler } = props;
+  const { items, totalItems, removeItem, increment, decrement} = props;
   
   return (
     items.length === 0 ? (
@@ -44,14 +44,6 @@ const ContextCart = props => {
               })}
             </Scrollbars>
           </div>
-        </div>
-        <div className="card-total">
-          <h3>
-           Total Cost: <span> {totalAmounts}₹ </span>
-          </h3>
-          <button onClick={submitChangeHandler}>Save Change</button>
-          <button onClick={clearCart} style={{"margin-left":"20px", "background-color":"#861717"}}>Clear Cart</button>
-          <button onClick={() => submitCheckOutHandler(true)} style={{"margin-left":"20px", "background-color":"#FF3A06"}}>Checkout</button>
         </div>
       </section>
     </>

@@ -58,7 +58,7 @@ function NavigationBar() {
           </Link>
           ):(<></>)}
           {isLoggedIn ? (
-            <Link to='cart' className='menu-bars-right-item'>
+            <Link to='/cart' className='menu-bars-right-item'>
             <FaIcons.FaShoppingCart />
             </Link>
           ):(<></>)}

@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router";
+import { useLocation } from 'react-router-dom';
 import { Grid } from "semantic-ui-react";
 import VehicleItem from "./VehicleItem";
 import FilterBar from "../Filter/FilterBar";
@@ -14,20 +16,30 @@ import {
   getVehicleList
 } from "../../redux/vehicleSlice/vehicleSlice";
 import {
-  getVehicleLineList,
   getVehicleLineList2
 } from "../../redux/vehicleSlice/vehicleLineSlice";
 import {
-  getVehicleTypeList,
   getVehicleTypeList2
 } from "../../redux/vehicleSlice/vehicleTypeSlice";
 import Pagination from '../../pages/Pagination/Pagination';
 
 let PageSize = 10;
+function useQuery() {
+  const { search } = useLocation();
+
+  return React.useMemo(() => new URLSearchParams(search), [search]);
+}
+
 function VehicleList() {
-  const dispatch = useDispatch()
+  const history = useHistory();
+  const dispatch = useDispatch();
+  let query = useQuery();
+  let name = query.get("name");
+  let vehicleTypeId = query.get("vehicleTypeId");
+  let vehicleLineId = query.get("vehicleLineId");
+
   const [openPopup, setOpenPopup] = useState(false)
-  const [keyWord, setKeyWord] = useState(null);
+  const [keyWord, setKeyWord] = useState(name != null ? name : null);
   const [editedItem, setEditedItem] = useState(null);
   const [isEdited, setIsEdited] = useState(false);
   const vehicles = useSelector(state => state.vehicle.items);
@@ -35,10 +47,15 @@ function VehicleList() {
   const vehicleTypes = useSelector(state => state.vehicleType.allItems);
   const [currentPage, setCurrentPage] = useState(1);
   const totalVehicles = useSelector(state => state.vehicle.totalVehicle);
-  const [filterVehicleLine, setFilterVehicleLine] = useState(null);
-  const [filterVehicleType, setFilterVehicleType] = useState(null);
+  const [filterVehicleLine, setFilterVehicleLine] = useState(vehicleLineId != null ? vehicleLineId : null);
+  const [filterVehicleType, setFilterVehicleType] = useState(vehicleTypeId != null ? vehicleTypeId : null);
 
+  // Options for selection
   let vehicleLineOptions = [{"setSelected":setFilterVehicleLine}];
+  vehicleLineOptions.push({
+    "value":null,
+    "label":"All",
+  });
   vehicleLines.forEach(item => {
     vehicleLineOptions.push({
       "value":item.id,
@@ -47,6 +64,10 @@ function VehicleList() {
   })
 
   let vehicleTypeOptions = [{"setSelected":setFilterVehicleType}];
+  vehicleTypeOptions.push({
+    "value":null,
+    "label":"All",
+  });
   vehicleTypes.forEach(item => {
     vehicleTypeOptions.push({
       "value":item.id,
@@ -86,12 +107,35 @@ function VehicleList() {
   },[])
 
   useEffect(() => {
+    var pathName = '/vehicle';
+    var searches = '';
+
+    if(keyWord != null && keyWord.length>0){
+      if(searches.includes('?')) searches += '&name='+keyWord;
+      else searches += '?name='+keyWord;
+    }
+
+    if(filterVehicleLine != null){
+      if(searches.includes('?')) searches += '&vehicleLineId='+filterVehicleLine;
+      else searches += '?vehicleLineId='+filterVehicleLine;
+    }
+
+    if(filterVehicleType != null){
+      if(searches.includes('?')) searches += '&vehicleTypeId='+filterVehicleType;
+      else searches += '?vehicleTypeId='+filterVehicleType;
+    }
+
+    history.push({
+      pathname: pathName,
+      search: searches,
+    })
+
     dispatch(getVehicleList({
       keyWord:keyWord != null ? keyWord : null, 
       skipCount:0,
       vehicleLineId: filterVehicleLine != null ? filterVehicleLine : null,
       vehicleTypeId: filterVehicleType != null ? filterVehicleType : null
-    }))
+    }));
   },[keyWord, filterVehicleLine, filterVehicleType])
 
   useEffect(() => {

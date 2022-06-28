@@ -20,13 +20,16 @@ import {
 } from "../../../redux/cartSlice/userCartSlice";
 
 const VehicleDetail = props => {
-
-  const currentVehicle = useSelector((state) => state.vehicle.currentVehicle);
-  const history = useHistory();
   const dispatch = useDispatch();
+  useEffect(() => {
+    console.log("hello")
+  },[])
+  const history = useHistory();
   const directoryPath = "http://localhost:3333/vehicle-images/";
   const [openPopup, setOpenPopup] = useState(false)
   const currentUser = JSON.parse(localStorage.getItem("user"));
+  const currentVehicle = useSelector((state) => state.vehicle.currentVehicle);
+  const isAdmin = useSelector(state => state.user.admin);
 
   async function fileUpload(file) {
     const url = `https://springrestapi-carrental.herokuapp.com/api/images/add?id=${currentVehicle.id}`;
@@ -53,7 +56,8 @@ const VehicleDetail = props => {
       userId: currentUser.id,
       vehicleId: id,
       quantity: 1
-  }));
+    }));
+    history.push('/vehicle')
   }
 
   return (
@@ -94,7 +98,7 @@ const VehicleDetail = props => {
                 <span>{currentVehicle.code}</span>
               </div>
               <h4 style={{"margin-bottom": "1px" }}><FaIcons.FaRoad /> Kilometer Traveled: {currentVehicle.kilometerTravel} km</h4>
-              <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaIdCard /> License Plate: {currentVehicle.licensePlate} </h4>
+              <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaIdCard /> Amount: {currentVehicle.amount} </h4>
               <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaMoneyCheck /> Rental Price: {currentVehicle.rentalPrice} $</h4>
               <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaMoneyBill /> Deposit Price: {currentVehicle.depositPrice} $</h4>
               <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaCheck /> Vehicle Type: {currentVehicle.vehicleType.name}</h4>
@@ -108,11 +112,10 @@ const VehicleDetail = props => {
               {/* <p>{currentVehicle.description}</p> */}
               {/* <p>{products[0].colors}</p> */}
               {(currentUser != null) ? <button className="cart" onClick={() => handleAddToCart(currentVehicle.id)} >Add to cart</button> : <></>}
-              
-              <div>
+              {(currentUser != null && isAdmin == true) ? <div>
                 <button className="cart" style={{"margin-right": "10px", "background-color":"#38A793"}} onClick={() => setOpenPopup(true)}><FaIcons.FaEdit /></button> 
                 <button className="cart" style={{"background-color":"#EC7575"}} onClick={() => handleDelete(currentVehicle.id)}><FaIcons.FaTrash /></button>
-              </div>
+              </div> : <></>}
             </div>
           </div>
       </div>

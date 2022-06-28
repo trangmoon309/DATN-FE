@@ -100,9 +100,6 @@ export const userCartSlice = createSlice({
         state.totalAmounts = state.totalAmounts + item.vehicle.depositPrice;      
       });
     },
-    [createUserCart.fulfilled]: (state, action) => {
-      state.items.unshift(action.payload)
-    },
     [updateUserCart.fulfilled]: (state, action) => {
       const list = [...state.items];
       const targetIndex = state.items.findIndex(f=>f.id===action.payload.id); 

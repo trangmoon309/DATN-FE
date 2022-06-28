@@ -14,6 +14,7 @@ import * as FaIcons from 'react-icons/fa';
 import './rating.css';
 import Popup from "../../components/Popup";
 import TransactionDetailForm from './TransactionDetailForm';
+import TransactionDetailReviewForm from './TransactionDetailReviewForm';
 
 let PageSize = 10;
 const TransactionList = props => {
@@ -28,6 +29,7 @@ const TransactionList = props => {
   const [keyWord, setKeyWord] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [openPopup, setOpenPopup] = useState(false)
+  const [openReviewPopup, setOpenReviewPopup] = useState(false)
 
   let rentalStatusOptions = [
     {"setSelected":setFilterRentalStatus},
@@ -94,12 +96,21 @@ const TransactionList = props => {
         setKeyWord={setKeyWord}
       ></FilterBar>
       <Popup
-          title="Vehicle Form"
+          title="Transaction Form"
           openPopup={openPopup}
           setOpenPopup={setOpenPopup}>
           <TransactionDetailForm
             content={editedItem} 
             setOpenPopup={setOpenPopup} />
+      </Popup>
+      <Popup 
+        title="Transaction Review Form"
+        openPopup={openReviewPopup}
+        setOpenPopup={setOpenReviewPopup}
+        >
+          <TransactionDetailReviewForm
+            content={editedItem} 
+            setOpenPopup={setOpenReviewPopup} />
       </Popup>
       <table className="dataTable">
         <thead>
@@ -113,6 +124,7 @@ const TransactionList = props => {
             <th>Cost Status</th>
             <th>Rental Status</th>
             <th>Review Service Quality</th>
+            <th></th>
             <th></th>
             <th></th>
           </tr>
@@ -141,6 +153,12 @@ const TransactionList = props => {
                     <button onClick={() => {setOpenPopup(true);setEditedItem(item)}}
                             style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
                     <FaIcons.FaInfo />
+                    </button>
+                </td>
+                <td style={{"text-align":"center", "position":"relative"}}>
+                    <button onClick={() => {setOpenReviewPopup(true);setEditedItem(item)}}
+                            style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
+                    <FaIcons.FaStar />
                     </button>
                 </td>
                 <td style={{"text-align":"center", "position":"relative"}}>

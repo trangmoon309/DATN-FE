@@ -163,11 +163,11 @@ export default function VehicleForm(props) {
                         error={errors.kilometerTravel}
                     />
                     <Controls.Input
-                        name="licensePlate"
-                        label="License Plate"
-                        value={values.licensePlate}
+                        name="amount"
+                        label="Amount"
+                        value={values.amount}
                         onChange={handleInputChange}
-                        error={errors.licensePlate}
+                        error={errors.amount}
                     />
                     <Controls.Input
                         name="rentalPrice"
