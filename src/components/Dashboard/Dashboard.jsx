@@ -26,27 +26,32 @@ export default function Dashboard() {
 
   const isAdmin = useSelector(state => state.user.admin);
   const currentUser = useSelector(state => state.user.currentUser);
-  const currentUserStorage = localStorage.getItem("user");
+  const currentUserStorage = JSON.parse(localStorage.getItem("user"));
+  var adminFlag = isAdmin;
 
   useEffect(() => {
-    if(currentUser == null &&  currentUserStorage!= null){
-      dispatch(setCurrentUser({
-        user: JSON.parse(currentUserStorage),
-      })).then((res) => {
-        if(isAdmin == true){
-          dispatch(getUserList());
-          dispatch(getUserTransactionList({skipCount:0,searchRequest:{
-            userId:null,
-            keyWord:null,
-            costStatus:null,
-            rentalStatus:null
-          }}));
-          dispatch(getSummary());
+    dispatch(setCurrentUser({user:currentUserStorage}));
+
+    if(currentUserStorage.userRoles != null && currentUserStorage.userRoles.length > 0){
+      currentUserStorage.userRoles.forEach(x => {
+        if(x.role != null && x.role.name == 'admin'){
+          adminFlag = true;
+          return;
         }
-        else{
-          history.push('/vehicle');  
-        }
-      });
+      })
+    }
+    if(adminFlag == true){
+      dispatch(getUserList());
+      dispatch(getUserTransactionList({skipCount:0,searchRequest:{
+        userId:null,
+        keyWord:null,
+        costStatus:null,
+        rentalStatus:null
+      }}));
+      dispatch(getSummary());
+    }
+    else{
+      history.push('/vehicle');  
     }
   },[])
 

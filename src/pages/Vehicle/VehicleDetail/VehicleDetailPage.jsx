@@ -30,6 +30,7 @@ const VehicleDetail = props => {
   const currentUser = JSON.parse(localStorage.getItem("user"));
   const currentVehicle = useSelector((state) => state.vehicle.currentVehicle);
   const isAdmin = useSelector(state => state.user.admin);
+  const isLogin = useSelector(state => state.user.loggedIn);
 
   async function fileUpload(file) {
     const url = `https://springrestapi-carrental.herokuapp.com/api/images/add?id=${currentVehicle.id}`;

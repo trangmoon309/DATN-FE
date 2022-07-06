@@ -53,6 +53,7 @@ const VehicleLineList = props => {
   const [isEdited, setIsEdited] = useState(false);
   const classes = useStyles();
   const options = []
+  const isAdmin = useSelector(state => state.user.admin);
 
   useEffect(() => {
     dispatch(getVehicleLineList({keyWord:keyWord, skipCount:0}));
@@ -139,18 +140,19 @@ const VehicleLineList = props => {
                   <td>{item.code}</td>
                   <td>{item.name}</td>
                   <td>{item.creationTime}</td>
-                  <td style={{"text-align":"center", "position":"relative"}}>
+                  
+                  {(isAdmin == true) ? <td style={{"text-align":"center", "position":"relative"}}>
                     <button onClick={() => { setOpenPopup(true); setEditedItem(item); setIsEdited(true)}}
                             style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
                     <FaIcons.FaEdit />
                     </button>
-                  </td>
-                  <td style={{"text-align":"center"}}>
+                  </td> : <td></td>}
+                  {(isAdmin == true) ? <td style={{"text-align":"center"}}>
                     <button onClick={() => {handleDelete(item.id)}}
                             style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
                     <FaIcons.FaTrash />
                     </button>
-                  </td>
+                  </td> : <td></td>}
                 </tr>
               );
             })}

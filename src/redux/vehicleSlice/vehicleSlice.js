@@ -11,6 +11,14 @@ export const getVehicleList = createAsyncThunk(
   }
 );
 
+export const getRecommendVehicleList = createAsyncThunk(
+  "vehicle/getRecommendVehicleList",
+  async (credentials) => {
+    const response = await service.getRecommendList(credentials.userId, credentials.keyWord, credentials.skipCount, credentials.vehicleTypeId, credentials.vehicleLineId);
+    return response.data;
+  }
+);
+
 export const getVehicleList2 = createAsyncThunk(
   "vehicle/getList2",
   async (credentials) => {
@@ -56,6 +64,8 @@ export const vehicleSlice = createSlice({
   name: "vehicle",
   initialState: {
     items: [],
+    recommendItems: [],
+    totalRecommendVehicle : 0,
     allItems:[],
     deletedItem : null,
     totalVehicle : 0,
@@ -73,6 +83,10 @@ export const vehicleSlice = createSlice({
     [getVehicleList.fulfilled]: (state, action) => {
       state.items = action.payload.items;
       state.totalVehicle = action.payload.totalCount;
+    },
+    [getRecommendVehicleList.fulfilled]: (state, action) => {
+      state.recommendItems = action.payload.items;
+      state.totalRecommendVehicle = action.payload.totalCount;
     },
     [getVehicleList2.fulfilled]: (state, action) => {
       state.allItems = action.payload.allItems;

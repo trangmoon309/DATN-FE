@@ -56,6 +56,17 @@ export const VehicleEndpoint = {
     GetListByCondition
 }
 
+// Recommend
+const Recommend = 'recommend';
+const GetRecommendList = 'get-props/by-user';
+const TrackingChange = 'tracking-changes';
+export const RecommendEndpoint = {
+    Recommend,
+    GetRecommendList,
+    TrackingChange,
+}
+
+
 // User Transaction
 const UserTransaction = 'user-transactions';
 const Summary = 'summary';

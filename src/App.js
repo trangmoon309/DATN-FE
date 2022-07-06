@@ -10,7 +10,7 @@ import TransactionList from "./pages/Transaction/TransactionListPage";
 import Dashboard from "./components/Dashboard/Dashboard";
 import ProfilePage from "./pages/User/ProfilePage";
 import Cart from "./pages/Cart/Cart";
-
+import RecommendList from "./pages/Recommend/RecommendList";
 function App() {
   return (
     <Switch>
@@ -19,6 +19,9 @@ function App() {
       </Route>
       <Route exact path="/dashboard">
         <Dashboard></Dashboard>
+      </Route>
+      <Route exact path="/recommendation">
+        <RecommendList></RecommendList>
       </Route>
       <Route exact path="/signin">
         <SignInPage></SignInPage>

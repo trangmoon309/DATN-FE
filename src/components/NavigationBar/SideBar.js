@@ -38,5 +38,12 @@ export const SidebarData = [
     icon: <FaIcons.FaShoppingCart />,
     cName: 'nav-text',
     isForClient: true
+  },
+  {
+    title: 'Recommend',
+    path: '/recommendation',
+    icon: <FaIcons.FaLaptopMedical />,
+    cName: 'nav-text',
+    isForClient: true
   }
 ];

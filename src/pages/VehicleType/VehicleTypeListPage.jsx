@@ -39,6 +39,7 @@ const VehicleTypeList = props => {
   const [openPopup, setOpenPopup] = useState(false);
   const [editedItem, setEditedItem] = useState(null);
   const [isEdited, setIsEdited] = useState(false);
+  const isAdmin = useSelector(state => state.user.admin);
 
   const useStyles = makeStyles(theme => ({
     pageContent: {
@@ -148,18 +149,19 @@ const VehicleTypeList = props => {
                 <td>{item.name}</td>
                 <td>{item.name}</td>
                 <td>{item.creationTime}</td>
-                <td style={{"text-align":"center", "position":"relative"}}>
+
+                {(isAdmin == true) ? <td style={{"text-align":"center", "position":"relative"}}>
                 <button onClick={() => { setOpenPopup(true); setEditedItem(item); setIsEdited(true)}}
                           style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
                   <FaIcons.FaEdit />
                   </button>
-                </td>
-                <td style={{"text-align":"center"}}>
+                </td> : <td></td>}
+                  {(isAdmin == true) ? <td style={{"text-align":"center"}}>
                 <button onClick={() => {handleDelete(item.id)}}
                           style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
                   <FaIcons.FaTrash />
                   </button>
-                </td>
+                </td> : <td></td>}
               </tr>
             );
           })}
