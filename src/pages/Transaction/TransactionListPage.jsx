@@ -30,6 +30,8 @@ const TransactionList = props => {
   const [currentPage, setCurrentPage] = useState(1);
   const [openPopup, setOpenPopup] = useState(false)
   const [openReviewPopup, setOpenReviewPopup] = useState(false)
+  const currentUser = JSON.parse(localStorage.getItem("user"));
+  const isAdmin = useSelector(state => state.user.admin);
 
   let rentalStatusOptions = [
     {"setSelected":setFilterRentalStatus},
@@ -52,7 +54,7 @@ const TransactionList = props => {
 
   useEffect(() => {
     dispatch(getUserTransactionList({skipCount:0,searchRequest:{
-      userId:null,
+      userId:isAdmin ? null : currentUser.id,
       keyWord:null,
       costStatus:null,
       rentalStatus:null
@@ -67,7 +69,7 @@ const TransactionList = props => {
 
   useEffect(() => {
     dispatch(getUserTransactionList({skipCount:0,searchRequest:{
-      userId:null,
+      userId:isAdmin ? null : currentUser.id,
       keyWord:keyWord != null ? keyWord : null,
       costStatus:filterCostStatus != null ? filterCostStatus : null,
       rentalStatus:filterRentalStatus != null ? filterRentalStatus : null
@@ -103,7 +105,7 @@ const TransactionList = props => {
             content={editedItem} 
             setOpenPopup={setOpenPopup} />
       </Popup>
-      <Popup 
+      {(isAdmin == false) ? <Popup 
         title="Transaction Review Form"
         openPopup={openReviewPopup}
         setOpenPopup={setOpenReviewPopup}
@@ -111,7 +113,8 @@ const TransactionList = props => {
           <TransactionDetailReviewForm
             content={editedItem} 
             setOpenPopup={setOpenReviewPopup} />
-      </Popup>
+      </Popup> : <td></td>}
+      
       <table className="dataTable">
         <thead>
           <tr>
@@ -155,13 +158,13 @@ const TransactionList = props => {
                     <FaIcons.FaInfo />
                     </button>
                 </td>
-                <td style={{"text-align":"center", "position":"relative"}}>
+                {(isAdmin == false) ? <td style={{"text-align":"center", "position":"relative"}}>
                     <button onClick={() => {setOpenReviewPopup(true);setEditedItem(item)}}
                             style={{"align-self":"baseline", "width":"30px", "padding":"5px", "border-radius":"50px"}}>
                     <FaIcons.FaStar />
                     </button>
-                </td>
-                <td style={{"text-align":"center", "position":"relative"}}>
+                </td> : <td></td>}
+                {/* <td style={{"text-align":"center", "position":"relative"}}>
                     <button onClick={() => {handleDelete(item.id)}}
                             style={{"align-self":"baseline", 
                             "width":"30px", 
@@ -171,7 +174,8 @@ const TransactionList = props => {
                             "border-color":"none"}}>
                     <FaIcons.FaTrashRestore />
                     </button>
-                </td>
+                </td> */}
+                <td></td>
               </tr>
             );
           })}

@@ -44,6 +44,6 @@ export const SidebarData = [
     path: '/recommendation',
     icon: <FaIcons.FaLaptopMedical />,
     cName: 'nav-text',
-    isForClient: true
+    isForClient: true,
   }
 ];

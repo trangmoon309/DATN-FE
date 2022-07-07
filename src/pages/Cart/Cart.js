@@ -53,10 +53,8 @@ const Cart = () => {
       });
     }
     else{
-      if(userCarts.length == 0){
-        dispatch(getUserCartList({skipCount:0, userId:currentUser.id})).then(res => {
-        })
-      }
+      dispatch(getUserCartList({skipCount:0, userId:currentUser.id})).then(res => {
+      })
     }
   },[]);
 

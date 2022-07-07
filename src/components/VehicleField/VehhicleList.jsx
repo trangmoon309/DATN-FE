@@ -49,6 +49,7 @@ function VehicleList() {
   const totalVehicles = useSelector(state => state.vehicle.totalVehicle);
   const [filterVehicleLine, setFilterVehicleLine] = useState(vehicleLineId != null ? vehicleLineId : null);
   const [filterVehicleType, setFilterVehicleType] = useState(vehicleTypeId != null ? vehicleTypeId : null);
+  const isAdmin = useSelector(state => state.user.admin);
 
   // Options for selection
   let vehicleLineOptions = [{"setSelected":setFilterVehicleLine}];
@@ -161,12 +162,12 @@ function VehicleList() {
           setKeyWord={setKeyWord}
         ></FilterBar>
         <div className="wrapper" style={{"height": "50px", "position": "relative" }}>
-        <Controls.Button
-          text="Add New"
-          variant="outlined"
-          className={classes.newButton}
-          startIcon={<AddIcon />}
-          onClick={() => { setOpenPopup(true); setEditedItem(null); setIsEdited(false)}}/>
+        {(isAdmin == true) ? <Controls.Button
+            text="Add New"
+            variant="outlined"
+            className={classes.newButton}
+            startIcon={<AddIcon />}
+            onClick={() => { setOpenPopup(true); setEditedItem(null); setIsEdited(false)}}/> : <></>}
         </div>
         <Popup
           title="Vehicle Form"

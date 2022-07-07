@@ -110,13 +110,13 @@ const VehicleTypeList = props => {
           setKeyWord={setKeyWord}
       ></FilterBar>
       <div className="wrapper" style={{"height": "50px", "position": "relative" }}>
-        <Controls.Button
-          text="Add New"
-          variant="outlined"
-          className={classes.newButton}
-          startIcon={<AddIcon />}
-          onClick={() => { setOpenPopup(true); setEditedItem(null); setIsEdited(false)}}/>
-      </div>
+        {(isAdmin == true) ? <Controls.Button
+            text="Add New"
+            variant="outlined"
+            className={classes.newButton}
+            startIcon={<AddIcon />}
+            onClick={() => { setOpenPopup(true); setEditedItem(null); setIsEdited(false)}}/> : <></>}
+        </div>
       <Popup
         title="Vehicle Type Form"
         openPopup={openPopup}

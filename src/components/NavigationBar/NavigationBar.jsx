@@ -57,7 +57,7 @@ function NavigationBar() {
             <FaIcons.FaUser />
           </Link>
           ):(<></>)}
-          {isLoggedIn ? (
+          {isLoggedIn && isAdmin == false ? (
             <Link to='/cart' className='menu-bars-right-item'>
             <FaIcons.FaShoppingCart />
             </Link>
@@ -76,15 +76,27 @@ function NavigationBar() {
             </li>
             {SidebarData.map((item, index) => {
               return (
-                isAdmin == false && item.isForClient == false ? (
-                  <></>
-                ) : (                  
-                <li key={index} className={item.cName}>
-                  <Link to={item.path}>
-                    {item.icon}
-                    <span>{item.title}</span>
-                  </Link>
-                </li>)
+                item.title == "Recommend" ? ((isAdmin == false && isLoggedIn == true) ? (
+                  isAdmin == false && item.isForClient == false ? (
+                    <></>
+                  ) : (                  
+                  <li key={index} className={item.cName}>
+                    <Link to={item.path}>
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </Link>
+                  </li>)
+                ) : <></>) : (
+                  isAdmin == false && item.isForClient == false ? (
+                    <></>
+                  ) : (                  
+                  <li key={index} className={item.cName}>
+                    <Link to={item.path}>
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </Link>
+                  </li>)
+                )
               );
             })}
           </ul>

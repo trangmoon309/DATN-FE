@@ -38,10 +38,7 @@ function RecommendList() {
   let vehicleTypeId = query.get("vehicleTypeId");
   let vehicleLineId = query.get("vehicleLineId");
 
-  const [openPopup, setOpenPopup] = useState(false)
   const [keyWord, setKeyWord] = useState(name != null ? name : null);
-  const [editedItem, setEditedItem] = useState(null);
-  const [isEdited, setIsEdited] = useState(false);
   const vehicles = useSelector(state => state.vehicle.recommendItems);
   const vehicleLines = useSelector(state => state.vehicleLine.allItems);
   const vehicleTypes = useSelector(state => state.vehicleType.allItems);
@@ -95,8 +92,6 @@ function RecommendList() {
     }
   }))
 
-  const classes = useStyles();
-
   useEffect(() => {
     dispatch(getRecommendVehicleList({userId: currentUser.id, keyWord:keyWord, skipCount:0}));
     if(vehicleLines.length == 0){
@@ -108,7 +103,7 @@ function RecommendList() {
   },[])
 
   useEffect(() => {
-    var pathName = '/vehicle';
+    var pathName = '/recommendation';
     var searches = '';
 
     if(keyWord != null && keyWord.length>0){
@@ -162,24 +157,6 @@ function RecommendList() {
           keyWord={keyWord}
           setKeyWord={setKeyWord}
         ></FilterBar>
-        <div className="wrapper" style={{"height": "50px", "position": "relative" }}>
-        <Controls.Button
-          text="Add New"
-          variant="outlined"
-          className={classes.newButton}
-          startIcon={<AddIcon />}
-          onClick={() => { setOpenPopup(true); setEditedItem(null); setIsEdited(false)}}/>
-        </div>
-        <Popup
-          title="Vehicle Form"
-          openPopup={openPopup}
-          setOpenPopup={setOpenPopup}>
-          <VehicleForm
-          recordForEdit={isEdited}
-          content={editedItem} 
-          setOpenPopup={setOpenPopup}
-          />
-        </Popup>
         <Grid columns="3">
           {vehicles.map((vehicle) => (
               <VehicleItem key={vehicle.id} vehicle={vehicle} vehicleImages={vehicle.vehicleImages}></VehicleItem>

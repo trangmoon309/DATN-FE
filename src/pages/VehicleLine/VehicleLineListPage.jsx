@@ -54,6 +54,7 @@ const VehicleLineList = props => {
   const classes = useStyles();
   const options = []
   const isAdmin = useSelector(state => state.user.admin);
+  const isLoggin = useSelector(state => state.user.loggedIn);
 
   useEffect(() => {
     dispatch(getVehicleLineList({keyWord:keyWord, skipCount:0}));
@@ -103,12 +104,12 @@ const VehicleLineList = props => {
           setKeyWord={setKeyWord}
         ></FilterBar>
         <div className="wrapper" style={{"height": "50px", "position": "relative" }}>
-          <Controls.Button
+        {(isAdmin == true) ? <Controls.Button
             text="Add New"
             variant="outlined"
             className={classes.newButton}
             startIcon={<AddIcon />}
-            onClick={() => { setOpenPopup(true); setEditedItem(null); setIsEdited(false)}}/>
+            onClick={() => { setOpenPopup(true); setEditedItem(null); setIsEdited(false)}}/> : <></>}
         </div>
         <Popup
           title="Vehicle Line Form"
