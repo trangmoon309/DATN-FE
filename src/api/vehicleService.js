@@ -9,7 +9,7 @@ export default class VehicleService{
     return localStorage.getItem("_token");
   };
 
-  getList = async(keyWord, skipCount, vehicleTypeId, vehicleLineId) => {
+  getList = async(keyWord, skipCount, vehicleTypeId, vehicleLineId, searchDate) => {
     var parameters = {
       "skipCount": skipCount,
       "maxResultCount": 10
@@ -17,6 +17,10 @@ export default class VehicleService{
 
     if(keyWord !== null) {
       parameters["keyWord"] = keyWord;
+    }
+
+    if(searchDate !== null) {
+      parameters["searchDate"] = searchDate;
     }
 
     if(vehicleTypeId !== null) {
@@ -30,6 +34,25 @@ export default class VehicleService{
     return await axios
       .request({
         url: `${VehicleEndpoint.Vehicle}/${VehicleEndpoint.GetListByCondition}`,
+        method: "get",
+        baseURL: `${API_URL}`,
+        withCredentials: true,
+        params:parameters
+      })
+      .then((response) => {
+        return Promise.resolve(response);
+      })
+      .catch((err) => Promise.reject(err));
+  }
+
+  getItemByDate = async(id, date) => {
+    var parameters = {
+      "date": date,
+    };
+
+    return await axios
+      .request({
+        url: `${VehicleEndpoint.Vehicle}/${VehicleEndpoint.GetItemListByDate}/${id}`,
         method: "get",
         baseURL: `${API_URL}`,
         withCredentials: true,

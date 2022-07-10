@@ -58,7 +58,6 @@ export default function CheckOutForm(props) {
                     name="receivedDate"
                     label="Received Date"
                     value={values.receivedDate}
-                    onChange={handleCartInputChange}
                 /> 
                 <Controls.Input
                     name="totalDays"

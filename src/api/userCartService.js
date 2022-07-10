@@ -9,11 +9,15 @@ export default class UserCartService{
     return localStorage.getItem("_token");
   };
 
-  getList = async(skipCount, userId) => {
+  getList = async(skipCount, userId, rentDate) => {
     var parameters = {
       "skipCount": skipCount,
       "maxResultCount": 1000
     };
+
+    if(rentDate != null){
+      parameters['rentDate'] = rentDate;
+    }
     
     return await axios
       .request({
@@ -33,7 +37,8 @@ export default class UserCartService{
     var reqData = {
         "userId": object.userId,
         "vehicleId": object.vehicleId,
-        "quantity": object.quantity
+        "quantity": object.quantity,
+        "rentDate": object.rentDate,
     };
     return await axios
       .request({
@@ -77,7 +82,8 @@ export default class UserCartService{
       "id": item.id,
       "userId": item.userId,
       "vehicleId": item.vehicleId,
-      "quantity": item.quantity
+      "quantity": item.quantity,
+      "rentDate": object.rentDate
     }));
     return await axios
       .request({
@@ -88,7 +94,7 @@ export default class UserCartService{
         data: reqData
       })
       .then((response) => {
-        toast.success("Successfully updated! ") 
+        //toast.success("Successfully updated! ") 
         return Promise.resolve(response);
       })
       .catch((err) =>{

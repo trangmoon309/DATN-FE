@@ -10,7 +10,7 @@ function VehicleItem({ vehicle, vehicleImages }) {
 
   function selectCarHandler() {
     dispatch(setCurrentVehicle(vehicle));
-    history.push(`/details/${vehicle.id}`);
+    history.push(`details/${vehicle.id}`);
   }
 
   return (

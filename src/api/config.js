@@ -50,10 +50,12 @@ export const VehicleTypeEndpoint = {
 const Vehicle = 'vehicles';
 const UploadImages = 'upload-vehicle-images';
 const GetListByCondition = 'by-condition';
+const GetItemListByDate = 'by-date';
 export const VehicleEndpoint = {
     Vehicle,
     UploadImages,
-    GetListByCondition
+    GetListByCondition,
+    GetItemListByDate
 }
 
 // Recommend

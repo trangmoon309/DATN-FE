@@ -23,6 +23,7 @@ import Popup from '../../components/Popup';
 import CheckOutForm from './CheckOutForm';
 import { toast } from "react-toastify";
 
+
 function useQuery() {
   const { search } = useLocation();
 
@@ -38,8 +39,6 @@ const Cart = () => {
   const currentUser = JSON.parse(localStorage.getItem("user"));
   const [openPopup, setOpenPopup] = useState(false);
 
-  const history = useHistory();
-
   // http://localhost:3000/cart/success?paymentId=1&token=2&PayerID=3
   // http://localhost:3000/cart/success?paymentId=PAYID-MKVCA3Q1PJ376187G961202W&token=EC-8DL16523S4023691H&PayerID=LAXAPG2X2KH94
   let query = useQuery();
@@ -49,6 +48,7 @@ const Cart = () => {
 
   useEffect(() => {
     if(paymentId != null && token != null && PayerID != null){
+      toast.success("Paypal checkout successfully!");
       return dispatch(paymentSuccess({paymentId: paymentId, PayerID:PayerID})).then((res) => {
       });
     }
@@ -97,7 +97,6 @@ const Cart = () => {
 
   const submitCheckOut = (total,receivedDate,totalDays) => {
     const result = userCarts.filter(x => x.isRanOut == true);
-    console.log(result.length);
     setOpenPopup(false);
     if(result.length > 0){
       toast.error("Check out fail: Remove RENT-OUT item from your cart before check out!");

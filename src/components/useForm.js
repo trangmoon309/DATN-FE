@@ -13,9 +13,6 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
             ...values,
             [name]: value,
           });
-        // if (validateOnChange)
-        //     validate({ [name]: value })
-        console.log(values)
     }
 
     // User Cart

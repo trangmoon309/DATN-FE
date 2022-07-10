@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from 'react-router-dom';
 import { useHistory} from "react-router";
 import NavigationBar from '../../../components/NavigationBar/NavigationBar';
 import "../../../table.css";
@@ -12,38 +13,25 @@ import * as FaIcons from 'react-icons/fa';
 import Popup from '../../../components/Popup';
 import VehicleForm from '../../../components/VehicleField/VehicleForm';
 import {
-  deleteVehicle
+  deleteVehicle,
+  getVehicleByDate
 } from "../../../redux/vehicleSlice/vehicleSlice";
 
 import {
   createUserCart
 } from "../../../redux/cartSlice/userCartSlice";
 
+
 const VehicleDetail = props => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    console.log("hello")
-  },[])
   const history = useHistory();
   const directoryPath = "http://localhost:3333/vehicle-images/";
   const [openPopup, setOpenPopup] = useState(false)
   const currentUser = JSON.parse(localStorage.getItem("user"));
   const currentVehicle = useSelector((state) => state.vehicle.currentVehicle);
   const isAdmin = useSelector(state => state.user.admin);
-  const isLogin = useSelector(state => state.user.loggedIn);
-
-  async function fileUpload(file) {
-    const url = `https://springrestapi-carrental.herokuapp.com/api/images/add?id=${currentVehicle.id}`;
-    const formData = new FormData();
-    formData.append("imageFile", file);
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-      },
-    };
-    const response = await axios.post(url, formData, config);
-    return response;
-  }
+  const { id } = useParams();
+  const rentDate = localStorage.getItem("searchVehicleDate");
 
   function handleDelete(id)
   {
@@ -56,7 +44,8 @@ const VehicleDetail = props => {
     dispatch(createUserCart({
       userId: currentUser.id,
       vehicleId: id,
-      quantity: 1
+      quantity: 1,
+      rentDate: rentDate
     }));
     history.push('/vehicle')
   }
@@ -100,6 +89,7 @@ const VehicleDetail = props => {
               </div>
               <h4 style={{"margin-bottom": "1px" }}><FaIcons.FaRoad /> Kilometer Traveled: {currentVehicle.kilometerTravel} km</h4>
               <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaIdCard /> Amount: {currentVehicle.amount} </h4>
+              <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaIdCard /> Remain Amount: {currentVehicle.remainAmount} </h4>
               <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaMoneyCheck /> Rental Price: {currentVehicle.rentalPrice} $</h4>
               <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaMoneyBill /> Deposit Price: {currentVehicle.depositPrice} $</h4>
               <h4 style={{"margin-top": "18px", "margin-bottom": "1px" }}><FaIcons.FaCheck /> Vehicle Type: {currentVehicle.vehicleType.name}</h4>

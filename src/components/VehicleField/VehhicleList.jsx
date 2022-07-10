@@ -30,6 +30,20 @@ function useQuery() {
   return React.useMemo(() => new URLSearchParams(search), [search]);
 }
 
+function formatDate(date) {
+  var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+  if (month.length < 2) 
+      month = '0' + month;
+  if (day.length < 2) 
+      day = '0' + day;
+
+  return [year, month, day].join('-');
+}
+
 function VehicleList() {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -50,6 +64,7 @@ function VehicleList() {
   const [filterVehicleLine, setFilterVehicleLine] = useState(vehicleLineId != null ? vehicleLineId : null);
   const [filterVehicleType, setFilterVehicleType] = useState(vehicleTypeId != null ? vehicleTypeId : null);
   const isAdmin = useSelector(state => state.user.admin);
+  const [searchDate, setSearchDate] = useState(formatDate(new Date(Date.now())));
 
   // Options for selection
   let vehicleLineOptions = [{"setSelected":setFilterVehicleLine}];
@@ -133,11 +148,15 @@ function VehicleList() {
 
     dispatch(getVehicleList({
       keyWord:keyWord != null ? keyWord : null, 
+      searchDate:searchDate != null ? searchDate : null, 
       skipCount:0,
       vehicleLineId: filterVehicleLine != null ? filterVehicleLine : null,
       vehicleTypeId: filterVehicleType != null ? filterVehicleType : null
     }));
-  },[keyWord, filterVehicleLine, filterVehicleType])
+
+    localStorage.setItem("searchVehicleDate", searchDate);
+
+    },[keyWord, filterVehicleLine, filterVehicleType, searchDate])
 
   useEffect(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -149,7 +168,6 @@ function VehicleList() {
     setCurrentPage(page);
     dispatch(getVehicleList({keyWord:keyWord, skipCount:(page-1)*10}))
   }
-
   return (
     <div>
       <div style={{"z-index": "2em" }}>
@@ -160,6 +178,9 @@ function VehicleList() {
           datas={options}
           keyWord={keyWord}
           setKeyWord={setKeyWord}
+          isSearchDate={true}
+          onChangeSearchDate={setSearchDate}
+          searchDateValue={searchDate}
         ></FilterBar>
         <div className="wrapper" style={{"height": "50px", "position": "relative" }}>
         {(isAdmin == true) ? <Controls.Button

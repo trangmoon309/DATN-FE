@@ -7,7 +7,7 @@ export const getUserCartList = createAsyncThunk(
   "userCart/getList",
   async (credentials) => {
     const currentUser = JSON.parse(localStorage.getItem("user"));
-    const response = await service.getList(credentials.skipCount, currentUser.id);
+    const response = await service.getList(credentials.skipCount, currentUser.id, credentials.rentDate);
     return response.data;
   }
 );
@@ -90,15 +90,21 @@ export const userCartSlice = createSlice({
           state.totalAmounts = state.totalAmounts - item.vehicle.depositPrice;
         }
       }
+      if(state.items.length == 0){
+        state.totalAmounts = 0;
+        state.totalItems = 0;
+      }
     }
   },
   extraReducers: {
     [getUserCartList.fulfilled]: (state, action) => {
       state.items = action.payload.items;
       state.totalItems = action.payload.totalCount;
+      var amount = 0;
       action.payload.items.forEach(item => {
-        state.totalAmounts = state.totalAmounts + item.vehicle.depositPrice;      
+        amount += item.vehicle.depositPrice;      
       });
+      state.totalAmounts = amount;
     },
     [updateUserCart.fulfilled]: (state, action) => {
       const list = [...state.items];
