@@ -6,7 +6,7 @@ const service = new VehicleService();
 export const getVehicleList = createAsyncThunk(
   "vehicle/getList",
   async (credentials) => {
-    const response = await service.getList(credentials.keyWord, credentials.skipCount, credentials.vehicleTypeId, credentials.vehicleLineId, credentials.searchDate);
+    const response = await service.getList(credentials.keyWord, credentials.skipCount, credentials.vehicleTypeId, credentials.vehicleLineId, credentials.searchDate, credentials.price, credentials.modelYear);
     return response.data;
   }
 );
@@ -102,12 +102,21 @@ export const vehicleSlice = createSlice({
     },
     [getVehicleByDate.fulfilled]: (state, action) => {
       state.currentVehicle = action.payload;
-      console.log("api done...")
-      console.log(action.payload)
     },
     [createVehicle.fulfilled]: (state, action) => {
       state.items.unshift(action.payload);
       state.currentVehicle = action.payload;
+    },
+    [updateImgs.fulfilled]: (state, action) => {
+      if(action.payload.length > 0){
+        console.log("api done...");
+        var vehicleId = action.payload[0].vehicleId;
+        const list = [...state.items];
+        const targetIndex = state.items.findIndex(f=>f.id===vehicleId); 
+        var editedVehicle = list[targetIndex];
+        editedVehicle.vehicleImages = action.payload;
+        state.currentVehicle = editedVehicle;
+      }
     },
     [updateVehicle.fulfilled]: (state, action) => {
       const list = [...state.items];

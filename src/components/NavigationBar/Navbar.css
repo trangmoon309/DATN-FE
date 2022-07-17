@@ -1,5 +1,5 @@
 .navbar {
-    background-color: #26A9E0;
+    background-color: #6AC1E6;
     display: flex;
     justify-content: start;
     align-items: center;
@@ -22,7 +22,7 @@
   .menu-bars-right {
     font-size: 2.3rem;
     background: none;
-    width: 40%;
+    width: 50%;
     padding-left: 24%;
   }
 
@@ -31,6 +31,7 @@
     background: none;
     width: 40%;
     margin: 10px;
+    border: none;
   }
   
   .nav-menu {

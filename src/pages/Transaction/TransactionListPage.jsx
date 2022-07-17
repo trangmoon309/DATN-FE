@@ -17,6 +17,19 @@ import TransactionDetailForm from './TransactionDetailForm';
 import TransactionDetailReviewForm from './TransactionDetailReviewForm';
 
 let PageSize = 10;
+function formatDate(date) {
+  var d = new Date(date),
+      month = '' + (d.getMonth() + 1),
+      day = '' + d.getDate(),
+      year = d.getFullYear();
+
+  if (month.length < 2) 
+      month = '0' + month;
+  if (day.length < 2) 
+      day = '0' + day;
+
+  return [year, month, day].join('-');
+}
 const TransactionList = props => {
   const history = useHistory();
   const dispatch = useDispatch();
@@ -25,7 +38,7 @@ const TransactionList = props => {
   const [filterCostStatus, setFilterCostStatus] = useState(null);
   const [filterRentalStatus, setFilterRentalStatus] = useState(null);
   const [editedItem, setEditedItem] = useState(null);
-
+  const [searchDate, setSearchDate] = useState(formatDate(new Date(Date.now())));
   const [keyWord, setKeyWord] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [openPopup, setOpenPopup] = useState(false)
@@ -72,9 +85,10 @@ const TransactionList = props => {
       userId:isAdmin ? null : currentUser.id,
       keyWord:keyWord != null ? keyWord : null,
       costStatus:filterCostStatus != null ? filterCostStatus : null,
-      rentalStatus:filterRentalStatus != null ? filterRentalStatus : null
+      rentalStatus:filterRentalStatus != null ? filterRentalStatus : null,
+      searchDate:searchDate != null ? searchDate : null, 
     }}))
-  },[keyWord, filterCostStatus, filterRentalStatus])
+  },[keyWord, filterCostStatus, filterRentalStatus, searchDate])
   
   const handleDelete = id => {
     dispatch(setDeletedItem(id));
@@ -96,6 +110,9 @@ const TransactionList = props => {
         datas={options}
         keyWord={keyWord}
         setKeyWord={setKeyWord}
+        isSearchDate={true}
+        onChangeSearchDate={setSearchDate}
+        searchDateValue={searchDate}
       ></FilterBar>
       <Popup
           title="Transaction Form"

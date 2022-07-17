@@ -45,10 +45,58 @@ export default class UserTransactionService{
     if(searchRequest.rentalStatus !== null) {
       parameters["rentalStatus"] = searchRequest.rentalStatus;
     }
+
+    if(searchRequest.searchDate !== null) {
+      parameters["searchDate"] = searchRequest.searchDate;
+    }
     
     return await axios
       .request({
         url: `${UserTransactionEndpoint.UserTransaction}`,
+        method: "get",
+        baseURL: `${API_URL}`,
+        withCredentials: true,
+        params:parameters
+      })
+      .then((response) => {
+        return Promise.resolve(response);
+      })
+      .catch((err) => Promise.reject(err));
+  }
+
+  getTransactionVehicleList = async(skipCount, searchRequest) => {
+    var parameters = {
+      "skipCount": skipCount,
+      "maxResultCount": 10
+    };
+
+    if(searchRequest.userId !== null) {
+      parameters["userId"] = searchRequest.userId;
+    }
+
+    if(searchRequest.keyWord !== null) {
+      parameters["keyWord"] = searchRequest.keyWord;
+    }
+
+    if(searchRequest.costStatus !== null) {
+      parameters["costStatus"] = searchRequest.costStatus;
+    }
+
+    if(searchRequest.rentalStatus !== null) {
+      parameters["rentalStatus"] = searchRequest.rentalStatus;
+    }
+
+    if(searchRequest.receiveDate !== null) {
+      parameters["receiveDate"] = searchRequest.receiveDate;
+    }
+
+    if(searchRequest.retunrnDate !== null) {
+      parameters["retunrnDate"] = searchRequest.retunrnDate;
+    }
+    
+    return await axios
+      .request({
+        url: '/user-transaction-vehicles/by-condition',
         method: "get",
         baseURL: `${API_URL}`,
         withCredentials: true,

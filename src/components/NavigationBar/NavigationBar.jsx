@@ -76,7 +76,7 @@ function NavigationBar() {
             </li>
             {SidebarData.map((item, index) => {
               return (
-                item.title == "Recommend" || item.title == "Transaction" ? ((isAdmin == false && isLoggedIn == true) ? (
+                item.title == "Recommend"? ((isAdmin == false && isLoggedIn == true) ? (
                   isAdmin == false && item.isForClient == false ? (
                     <></>
                   ) : (                  
@@ -87,7 +87,7 @@ function NavigationBar() {
                     </Link>
                   </li>)
                 ) : <></>) : (
-                  isAdmin == false && item.isForClient == false ? (
+                  isLoggedIn == false && item.isForClient == false ? (
                     <></>
                   ) : (                  
                   <li key={index} className={item.cName}>

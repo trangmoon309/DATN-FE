@@ -11,6 +11,14 @@ export const getUserTransactionList = createAsyncThunk(
   }
 );
 
+export const getUserTransactionVehicleList = createAsyncThunk(
+  "userTransaction/getUserTransactionVehicleList",
+  async (credentials) => {
+    const response = await service.getTransactionVehicleList(credentials.skipCount, credentials.searchRequest);
+    return response.data;
+  }
+);
+
 export const createUserTransaction = createAsyncThunk(
   "userTransaction/create",
   async (object) => {
@@ -104,6 +112,8 @@ export const userTransactionSlice = createSlice({
   name: "userTransaction",
   initialState: {
     items: [],
+    itemVehicles: [],
+    totalUserTransactionVehicle : 0,
     deletedItem : null,
     totalUserTransaction : 0,
     summary:{}
@@ -120,6 +130,10 @@ export const userTransactionSlice = createSlice({
     [getUserTransactionList.fulfilled]: (state, action) => {
       state.items = action.payload.items;
       state.totalUserTransaction = action.payload.totalCount;
+    },
+    [getUserTransactionVehicleList.fulfilled]: (state, action) => {
+      state.itemVehicles = action.payload.items;
+      state.totalUserTransactionVehicle = action.payload.totalCount;
     },
     [createUserTransaction.fulfilled]: (state, action) => {
       state.items.unshift(action.payload)

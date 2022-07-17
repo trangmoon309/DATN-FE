@@ -22,6 +22,8 @@ import {
   getVehicleTypeList2
 } from "../../redux/vehicleSlice/vehicleTypeSlice";
 import Pagination from '../../pages/Pagination/Pagination';
+import './vehicleListStyle.css'
+import { toast } from 'react-toastify';
 
 let PageSize = 10;
 function useQuery() {
@@ -63,8 +65,11 @@ function VehicleList() {
   const totalVehicles = useSelector(state => state.vehicle.totalVehicle);
   const [filterVehicleLine, setFilterVehicleLine] = useState(vehicleLineId != null ? vehicleLineId : null);
   const [filterVehicleType, setFilterVehicleType] = useState(vehicleTypeId != null ? vehicleTypeId : null);
+  const [filterModelYear, setFilterModelYear] = useState(null);
+
   const isAdmin = useSelector(state => state.user.admin);
   const [searchDate, setSearchDate] = useState(formatDate(new Date(Date.now())));
+  const [ price, setPrice ] = useState(0);
 
   // Options for selection
   let vehicleLineOptions = [{"setSelected":setFilterVehicleLine}];
@@ -91,9 +96,34 @@ function VehicleList() {
     })
   })
 
+  let modelYearOptions = [{"setSelected":setFilterModelYear}];
+  modelYearOptions.push(
+  {
+    "value":null,
+    "label":"All",
+  },
+  {
+    "value":2019,
+    "label":"2019",
+  },
+  {
+    "value":2020,
+    "label":"2020",
+  },
+  {
+    "value":2021,
+    "label":"2021",
+  },
+  {
+    "value":2022,
+    "label":"2022",
+  },
+  );
+
   const options = [
     vehicleLineOptions,
     vehicleTypeOptions,
+    modelYearOptions
   ]
 
   const useStyles = makeStyles(theme => ({
@@ -151,12 +181,14 @@ function VehicleList() {
       searchDate:searchDate != null ? searchDate : null, 
       skipCount:0,
       vehicleLineId: filterVehicleLine != null ? filterVehicleLine : null,
-      vehicleTypeId: filterVehicleType != null ? filterVehicleType : null
+      vehicleTypeId: filterVehicleType != null ? filterVehicleType : null,
+      price: price == 0 ? null : price,
+      modelYear: filterModelYear != null ? filterModelYear : null,
     }));
 
     localStorage.setItem("searchVehicleDate", searchDate);
 
-    },[keyWord, filterVehicleLine, filterVehicleType, searchDate])
+    },[keyWord, filterVehicleLine, filterVehicleType, searchDate, price,filterModelYear])
 
   useEffect(() => {
     const firstPageIndex = (currentPage - 1) * PageSize;
@@ -168,12 +200,33 @@ function VehicleList() {
     setCurrentPage(page);
     dispatch(getVehicleList({keyWord:keyWord, skipCount:(page-1)*10}))
   }
+
+
+  // Triggered when the value gets updated while scrolling the slider:
+  const handleInput = (e)=>{
+    setPrice( e.target.value );
+  }
   return (
     <div>
       <div style={{"z-index": "2em" }}>
         <NavigationBar></NavigationBar>
       </div>
-      <div className="app">
+      <div className="header-decorator">
+        <section class="section hero" id="home">
+          <div class="containerd">
+
+            <div class="hero-content">
+              <h2 class="h1 hero-title">THE EASY WAY TO TAKEOVER A VEHICLE</h2>
+
+              <p class="hero-text">
+                Based on Viet Nam!
+              </p>
+            </div>
+            <div class="hero-banner"></div>
+          </div>
+        </section>
+      </div>
+      <div className="app2">
         <FilterBar
           datas={options}
           keyWord={keyWord}
@@ -182,6 +235,8 @@ function VehicleList() {
           onChangeSearchDate={setSearchDate}
           searchDateValue={searchDate}
         ></FilterBar>
+
+        <input type="range" min="0" max="1000" onInput={ handleInput } /> <h5> Less than Price: ${ price }</h5>
         <div className="wrapper" style={{"height": "50px", "position": "relative" }}>
         {(isAdmin == true) ? <Controls.Button
             text="Add New"
@@ -215,6 +270,82 @@ function VehicleList() {
             onPageChange={page => {onPageChange(page)}}
           />
         </div>
+
+      {/* 4 simple steps */}
+      <section class="section get-start">
+        <div class="containerd">
+          <h2 class="h2 section-title">Get started with 4 simple steps</h2>
+
+          <ul class="get-start-list">
+
+            <li>
+              <div class="get-start-card">
+
+                <div class="card-icon icon-1">
+                  <ion-icon name="person-add-outline"></ion-icon>
+                </div>
+
+                <h3 class="card-title">Create a profile</h3>
+
+                <p class="card-text">
+                  If you are going to use a passage of Happy Rental, you need to signup and update your profile.
+                </p>
+
+              </div>
+            </li>
+
+            <li>
+              <div class="get-start-card">
+
+                <div class="card-icon icon-2">
+                  <ion-icon name="car-outline"></ion-icon>
+                </div>
+
+                <h3 class="card-title">Find what car you want</h3>
+
+                <p class="card-text">
+                  You can search for the car you are looking for renting. Based on criterias: type, line and the date you want to rent.
+                </p>
+
+              </div>
+            </li>
+
+            <li>
+              <div class="get-start-card">
+
+                <div class="card-icon icon-3">
+                  <ion-icon name="person-outline"></ion-icon>
+                </div>
+
+                <h3 class="card-title">Add to card</h3>
+
+                <p class="card-text">
+                  After finding out your suitable vehicles. Add them to your cart. Then you can adjust the amount you want to rent or remove them.
+                </p>
+
+              </div>
+            </li>
+
+            <li>
+              <div class="get-start-card">
+
+                <div class="card-icon icon-4">
+                  <ion-icon name="card-outline"></ion-icon>
+                </div>
+
+                <h3 class="card-title">Make a payment</h3>
+
+                <p class="card-text">
+                  You will be redirected to Paypal when check-out cart, you need to sign in your Paypal account and pay for the total cost.
+                </p>
+
+              </div>
+            </li>
+
+          </ul>
+
+        </div>
+      </section>
       <FooterContainer></FooterContainer>
     </div>
   );

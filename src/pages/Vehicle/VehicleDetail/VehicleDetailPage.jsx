@@ -32,7 +32,6 @@ const VehicleDetail = props => {
   const isAdmin = useSelector(state => state.user.admin);
   const { id } = useParams();
   const rentDate = localStorage.getItem("searchVehicleDate");
-
   function handleDelete(id)
   {
     dispatch(deleteVehicle(id));
@@ -73,7 +72,7 @@ const VehicleDetail = props => {
               )}
             </div>
             <Popup
-              title="Vehicle Form"
+              title="Vehicle Detail Form"
               openPopup={openPopup}
               setOpenPopup={setOpenPopup}>
               <VehicleForm

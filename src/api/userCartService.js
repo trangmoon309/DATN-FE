@@ -85,6 +85,8 @@ export default class UserCartService{
       "quantity": item.quantity,
       "rentDate": object.rentDate
     }));
+    console.log("hahaha");
+
     return await axios
       .request({
         url: `${UserCartEndpoint.UserCart}/${userId}`,
@@ -94,11 +96,11 @@ export default class UserCartService{
         data: reqData
       })
       .then((response) => {
-        //toast.success("Successfully updated! ") 
+        toast.success("Successfully updated! ") 
         return Promise.resolve(response);
       })
       .catch((err) =>{
-        toast.error(err.response.data.validationErrors[0].message);
+        toast.error(err.response.data.error.message);
         return Promise.reject(err);
       });
   };

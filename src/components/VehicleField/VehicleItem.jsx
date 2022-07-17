@@ -2,6 +2,8 @@ import React from "react";
 import { useDispatch } from "react-redux";
 import { useHistory } from "react-router";
 import {setCurrentVehicle} from "../../redux/vehicleSlice/vehicleSlice"
+import './vehicleListStyle.css'
+import * as AiIcons from 'react-icons/ai';
 
 function VehicleItem({ vehicle, vehicleImages }) {
   const directoryPath = "http://localhost:3333/vehicle-images/";
@@ -14,33 +16,31 @@ function VehicleItem({ vehicle, vehicleImages }) {
   }
 
   return (
-    <div style={{ position: "relative", "width": "33%", "margin-bottom": "55px" }}>
-      <img
-        className="carImage"
-        style={{
-          width: "100%",
-          height: "80%",
-          borderRadius: 8,
-          marginTop: "8px",
-          marginBottom: "5px",
-        }}
-        src={vehicleImages[0]?directoryPath + vehicleImages[0].fileInformationId + ".jpg":"https://lasd.lv/public/assets/no-image.png"}
-        onClick={selectCarHandler}
-      ></img>
+    <div class="featured-car-card">
+      <figure class="card-banner">
+        <img src={vehicleImages[0]?directoryPath + vehicleImages[0].fileInformationId + ".jpg":"https://lasd.lv/public/assets/no-image.png"}
+        onClick={selectCarHandler} alt="Toyota RAV4 2021" loading="lazy" width="440" height="300" class="w-100" />
+      </figure>
+        <div class="card-content">
+          <div class="card-title-wrapper">
+            <h3 class="h3 card-title">
+              {vehicle.name}
+            </h3>
 
-      <div
-        style={{
-          background: "white",
-          position: "absolute",
-          right: "3em",
-          bottom: "0.8em",
-          borderRadius: 10,
-          boxShadow: "0px 0px 18px 1px rgba(0,0,0,0.98)",
-        }}
-      >
-        <h3 style={{ padding: "5px", fontSize: 18 }}>${vehicle.rentalPrice}/day</h3>
+             <data class="year" value="2021">{vehicle.modelYear}</data>
+          </div>
+          <div class="card-price-wrapper">
+            <p class="card-price">
+              <strong>${vehicle.rentalPrice}</strong> / day
+            </p>
+
+            {/* <button class="btn fav-btn" aria-label="Add to favourite list">
+              <AiIcons.AiFillHeart />
+            </button> */}
+
+            {/* <button class="btn">Rent now</button> */}
+        </div>
       </div>
-      <p style={{ "margin-bottom": "100px", fontSize: 20, "text-align":"center", "font-weight":"bold" }}>${vehicle.name}</p>
     </div>
   );
 }

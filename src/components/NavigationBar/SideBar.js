@@ -33,11 +33,18 @@ export const SidebarData = [
     isForClient: true
   },
   {
+    title: 'History',
+    path: '/history',
+    icon: <FaIcons.FaBookOpen />,
+    cName: 'nav-text',
+    isForClient: false
+  },
+  {
     title: 'Transaction',
     path: '/transaction',
     icon: <FaIcons.FaShoppingCart />,
     cName: 'nav-text',
-    isForClient: true
+    isForClient: false
   },
   {
     title: 'Recommend',

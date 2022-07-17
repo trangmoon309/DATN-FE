@@ -9,10 +9,10 @@ export default class VehicleService{
     return localStorage.getItem("_token");
   };
 
-  getList = async(keyWord, skipCount, vehicleTypeId, vehicleLineId, searchDate) => {
+  getList = async(keyWord, skipCount, vehicleTypeId, vehicleLineId, searchDate, price, modelYear) => {
     var parameters = {
       "skipCount": skipCount,
-      "maxResultCount": 10
+      "maxResultCount": 12
     };
 
     if(keyWord !== null) {
@@ -29,6 +29,14 @@ export default class VehicleService{
 
     if(vehicleLineId !== null) {
       parameters["vehicleLineId"] = vehicleLineId;
+    }
+
+    if(price !== null) {
+      parameters["rentalPrice"] = price;
+    }
+
+    if(modelYear !== null) {
+      parameters["modelYear"] = modelYear;
     }
     
     return await axios
@@ -135,12 +143,13 @@ export default class VehicleService{
       "code": object.code,
       "name": object.name,
       "color": object.color,
-      "kilometerTravel": object.kilometerTravel,
+      "modelYear": object.modelYear,
       "licensePlate": object.licensePlate,
       "rentalPrice": object.rentalPrice,
       "depositPrice": object.depositPrice,
       "vehicleProperties": object.vehicleProperties,
     }
+
     return await axios
       .request({
         url: `${VehicleEndpoint.Vehicle}`,
@@ -193,7 +202,7 @@ export default class VehicleService{
       "code": object.code,
       "name": object.name,
       "color": object.color,
-      "kilometerTravel": object.kilometerTravel,
+      "modelYear": object.modelYear,
       "licensePlate": object.licensePlate,
       "rentalPrice": object.rentalPrice,
       "depositPrice": object.depositPrice,

@@ -11,6 +11,7 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import ProfilePage from "./pages/User/ProfilePage";
 import Cart from "./pages/Cart/Cart";
 import RecommendList from "./pages/Recommend/RecommendList";
+import TransactionVehicleListPage from "./pages/Transaction/TransactionVehicleListPage";
 function App() {
   return (
     <Switch>
@@ -52,6 +53,9 @@ function App() {
       </Route>
       <Route exact path="/cart/success">
         <Cart></Cart>
+      </Route>
+      <Route exact path="/history">
+        <TransactionVehicleListPage></TransactionVehicleListPage>
       </Route>
     </Switch>
   );

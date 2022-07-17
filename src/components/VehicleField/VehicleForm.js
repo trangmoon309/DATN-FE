@@ -85,6 +85,8 @@ export default function VehicleForm(props) {
     } = useForm(initialFValues, true, validate);
 
     const handleSubmit = e => {
+        console.log(values)
+
         if (recordForEdit != null && recordForEdit === true)
         {
             dispatch(updateVehicle(values)).then((result) => {
@@ -111,10 +113,10 @@ export default function VehicleForm(props) {
     }
 
     return (
-        <Form style={{"width":"120%"}}>
+        <Form style={{"width":"100%"}}>
             <Grid  container >
                 <h4>Images Uploading</h4>
-                <div style={{"width":"100%", "margin-left":"-90px"}}>
+                <div style={{"width":"100%"}}>
                     <UploadFile
                         images={images}
                         setImages={setImages}
@@ -156,11 +158,11 @@ export default function VehicleForm(props) {
                 </Grid>
                 <Grid item xs={6}>
                     <Controls.Input
-                        name="kilometerTravel"
-                        label="Kilometer Traveled"
-                        value={values.kilometerTravel}
+                        name="modelYear"
+                        label="Model Year"
+                        value={values.modelYear}
                         onChange={handleInputChange}
-                        error={errors.kilometerTravel}
+                        error={errors.modelYear}
                     />
                     <Controls.Input
                         name="amount"

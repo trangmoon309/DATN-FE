@@ -12,7 +12,7 @@ export function useForm(initialFValues, validateOnChange = false, validate) {
         setValues({
             ...values,
             [name]: value,
-          });
+        });
     }
 
     // User Cart
